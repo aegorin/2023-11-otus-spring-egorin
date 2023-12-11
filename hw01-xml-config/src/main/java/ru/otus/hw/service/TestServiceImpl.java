@@ -24,13 +24,9 @@ public class TestServiceImpl implements TestService {
 
     private void showQuestion(Question question) {
         ioService.printLine(question.text());
-        for (int i = 0; i < question.answers().size(); i++) {
-            showAnswer(i + 1, question.answers().get(i));
+        for (Answer answer : question.answers()) {
+            ioService.printFormattedLine("  %s (%b)", answer.text(), answer.isCorrect());
         }
         ioService.printLine("");
-    }
-
-    private void showAnswer(int positionAnswer, Answer answer) {
-        ioService.printFormattedLine("%2d) %s (%b)", positionAnswer, answer.text(), answer.isCorrect());
     }
 }
