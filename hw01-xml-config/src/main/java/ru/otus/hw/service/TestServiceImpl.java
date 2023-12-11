@@ -28,6 +28,6 @@ public class TestServiceImpl implements TestService {
     }
 
     private void showAnswer(int positionAnswer, Answer answer) {
-        ioService.printFormattedLine("%2d) %s", positionAnswer, answer.text());
+        ioService.printFormattedLine("%2d) %s (%b)", positionAnswer, answer.text(), answer.isCorrect());
     }
 }
