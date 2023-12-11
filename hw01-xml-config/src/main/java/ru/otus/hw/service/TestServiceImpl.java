@@ -5,6 +5,8 @@ import ru.otus.hw.dao.QuestionDao;
 import ru.otus.hw.domain.Answer;
 import ru.otus.hw.domain.Question;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
 
@@ -16,7 +18,8 @@ public class TestServiceImpl implements TestService {
     public void executeTest() {
         ioService.printLine("");
         ioService.printFormattedLine("Please answer the questions below%n");
-        questionDao.findAll().forEach(this::showQuestion);
+        List<Question> questions = questionDao.findAll();
+        questions.forEach(this::showQuestion);
     }
 
     private void showQuestion(Question question) {
