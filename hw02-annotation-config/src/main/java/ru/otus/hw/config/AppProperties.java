@@ -8,16 +8,25 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource("classpath:application.properties")
 @Data
-public class AppProperties implements TestFileNameProvider {
+public class AppProperties implements TestFileNameProvider, TestConfig {
 
     private final String testFileName;
 
-    public AppProperties(@Value("${test.fileName}") String testFileName) {
+    private final int rightAnswersCountToPass;
+
+    public AppProperties(@Value("${test.fileName}") String testFileName,
+                         @Value("${test.rightAnswersCountToPass}") int rightAnswersCountToPass) {
         this.testFileName = testFileName;
+        this.rightAnswersCountToPass = rightAnswersCountToPass;
     }
 
     @Override
     public String getTestFileName() {
         return testFileName;
+    }
+
+    @Override
+    public int getRightAnswersCountToPass() {
+        return rightAnswersCountToPass;
     }
 }
