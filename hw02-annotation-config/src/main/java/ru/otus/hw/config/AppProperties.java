@@ -1,13 +1,20 @@
 package ru.otus.hw.config;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
-@AllArgsConstructor
+@Configuration
+@PropertySource("classpath:application.properties")
 @Data
 public class AppProperties implements TestFileNameProvider {
 
-    private String testFileName;
+    private final String testFileName;
+
+    public AppProperties(@Value("${test.fileName}") String testFileName) {
+        this.testFileName = testFileName;
+    }
 
     @Override
     public String getTestFileName() {

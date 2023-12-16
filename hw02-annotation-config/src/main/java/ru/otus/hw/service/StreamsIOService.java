@@ -1,12 +1,16 @@
 package ru.otus.hw.service;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import java.io.PrintStream;
 
+@Service
 public class StreamsIOService implements IOService {
 
     private final PrintStream printStream;
 
-    public StreamsIOService(PrintStream printStream) {
+    public StreamsIOService(@Value("#{T(System).out}") PrintStream printStream) {
         this.printStream = printStream;
     }
 
