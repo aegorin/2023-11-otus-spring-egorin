@@ -8,8 +8,9 @@ class TestRunnerServiceImplTest {
 
     @Test
     void run_executeTest_one_time() {
-        TestService testService = mock(TestService.class);
-        TestRunnerService testRunner = new TestRunnerServiceImpl(testService);
+        var testService = mock(TestService.class);
+        var studentService = mock(StudentService.class);
+        TestRunnerService testRunner = new TestRunnerServiceImpl(testService, studentService);
 
         testRunner.run();
         verify(testService, times(1)).executeTest();
