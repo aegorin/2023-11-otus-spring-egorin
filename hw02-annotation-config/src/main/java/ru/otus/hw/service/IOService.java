@@ -6,4 +6,6 @@ public interface IOService {
     void printFormattedLine(String s, Object ...args);
 
     String readStringWithPrompt(String prompt);
+
+    int readIntForRange(int min, int max, String errorMessage);
 }

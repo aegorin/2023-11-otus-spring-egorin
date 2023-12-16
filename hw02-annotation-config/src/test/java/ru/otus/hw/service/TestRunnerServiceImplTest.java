@@ -13,6 +13,6 @@ class TestRunnerServiceImplTest {
         TestRunnerService testRunner = new TestRunnerServiceImpl(testService, studentService);
 
         testRunner.run();
-        verify(testService, times(1)).executeTest();
+        verify(testService, times(1)).executeTestFor(any());
     }
 }
