@@ -11,14 +11,15 @@ import ru.otus.hw.domain.Student;
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
 
-    private final IOService ioService;
+    private final LocalizedIOService ioService;
 
     private final QuestionDao questionDao;
 
     @Override
     public TestResult executeTestFor(Student student) {
         ioService.printLine("");
-        ioService.printFormattedLine("Please answer the questions below%n");
+        ioService.printLineLocalized("TestService.answer.the.questions");
+        ioService.printLine("");
         var questions = questionDao.findAll();
         var testResult = new TestResult(student);
 
@@ -43,7 +44,7 @@ public class TestServiceImpl implements TestService {
     }
 
     private int requestAnswerOption(int maximalOptionValue) {
-        ioService.printFormattedLine("Enter an answer option from 1 to %d", maximalOptionValue);
-        return ioService.readIntForRange(1, maximalOptionValue, "Outside the acceptable range");
+        ioService.printFormattedLineLocalized("TestService.answer.option.range", 1, maximalOptionValue);
+        return ioService.readIntForRangeLocalized(1, maximalOptionValue, "TestService.answer.option.out.range");
     }
 }

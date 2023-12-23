@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 class StudentServiceImplTest {
 
     @Mock
-    private IOService ioService;
+    private LocalizedIOService ioService;
 
     @InjectMocks
     private StudentServiceImpl studentService;
@@ -25,7 +25,7 @@ class StudentServiceImplTest {
     void readStringWithPrompt_order_promts() {
         var studentFirstName = "имя студента";
         var studentLastName = "фамилия";
-        when(ioService.readStringWithPrompt(anyString()))
+        when(ioService.readStringWithPromptLocalized(anyString()))
                 .thenReturn(studentFirstName)
                 .thenReturn(studentLastName);
 
