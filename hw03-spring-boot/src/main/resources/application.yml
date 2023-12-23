@@ -12,3 +12,7 @@ test:
     en-US: questions.csv
   locale: en-US
   rightAnswersCountToPass: 4
+
+logging:
+  level:
+    root: WARN
