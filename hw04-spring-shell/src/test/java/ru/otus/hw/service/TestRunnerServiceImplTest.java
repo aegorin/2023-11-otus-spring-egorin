@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.CommandLineRunner;
-import ru.otus.hw.commandlinerunners.TestRunnerImpl;
 
 import static org.mockito.Mockito.*;
 
@@ -22,8 +20,8 @@ class TestRunnerServiceImplTest {
     ResultService resultService;
 
     @Test
-    void run_executeTest_one_time() throws Exception {
-        CommandLineRunner testRunner = new TestRunnerImpl(testService, studentService, resultService);
+    void run_executeTest_one_time() {
+        TestRunnerService testRunner = new TestRunnerServiceImpl(testService, studentService, resultService);
 
         testRunner.run();
         verify(testService, times(1)).executeTestFor(any());
