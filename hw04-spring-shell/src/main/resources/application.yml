@@ -1,6 +1,9 @@
 spring:
   main:
     banner-mode: off
+  shell:
+    history:
+      enabled: false
   messages:
     baseName: messages
     encoding: UTF-8
