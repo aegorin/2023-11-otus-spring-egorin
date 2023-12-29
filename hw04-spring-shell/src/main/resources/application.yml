@@ -15,4 +15,4 @@ test:
 
 logging:
   level:
-    root: WARN
+    root: OFF
