@@ -1,28 +1,29 @@
 package ru.otus.hw.service;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class TestRunnerServiceImplTest {
 
-    @Mock
-    TestService testService;
+    @Autowired
+    private TestRunnerService testRunner;
 
-    @Mock
-    StudentService studentService;
+    @MockBean
+    private TestService testService;
 
-    @Mock
-    ResultService resultService;
+    @MockBean
+    private StudentService studentService;
+
+    @MockBean
+    private ResultService resultService;
 
     @Test
     void run_executeTest_one_time() {
-        TestRunnerService testRunner = new TestRunnerServiceImpl(testService, studentService, resultService);
-
         testRunner.run();
         verify(testService, times(1)).executeTestFor(any());
     }
