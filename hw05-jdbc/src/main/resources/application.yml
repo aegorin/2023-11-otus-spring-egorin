@@ -10,6 +10,10 @@ spring:
     password: 1
     driverClassName: org.h2.Driver
 
+  liquibase:
+    change-log: classpath:db/changelog/changelog.yml
+    contexts: production
+
 logging:
   level:
     root: OFF
