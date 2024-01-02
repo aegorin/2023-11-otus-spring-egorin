@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-01-02--02-insert-data
+      author: egorin.av
+      changes:
+        - loadData:
+            tableName: authors
+            relativeToChangelogFile: true
+            usePreparedStatements: true
+            encoding:  UTF-8
+            file:  data/authors.csv
+            columns:
+              - column:
+                  name: full_name
+                  index: 1
+        - loadData:
+            tableName: genres
+            relativeToChangelogFile: true
+            usePreparedStatements: true
+            encoding:  UTF-8
+            file:  data/genres.csv
+            columns:
+              - column:
+                  name: name
+                  index: 1
+        - loadData:
+            tableName: books
+            relativeToChangelogFile: true
+            usePreparedStatements: true
+            encoding:  UTF-8
+            file:  data/books.csv
+            columns:
+              - column:
+                  name: title
+                  index: 1
+              - column:
+                  name: author_id
+                  index: 2
+              - column:
+                  name: genre_id
+                  index: 3

@@ -2,3 +2,11 @@ databaseChangeLog:
   - include:
       file: 2024-01-02--01-create-tables.yml
       relativeToChangelogFile: true
+  - include:
+      context: "!test"
+      file: 2024-01-02--02-insert-data.yml
+      relativeToChangelogFile: true
+  - include:
+      context: "test"
+      file: 2024-01-02--03-insert-data-test.yml
+      relativeToChangelogFile: true
