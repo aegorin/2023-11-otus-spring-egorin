@@ -1,0 +1,19 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+  main:
+    banner-mode: off
+  messages:
+    baseName: messages
+    encoding: UTF-8
+
+test:
+  fileNameByLocaleTag:
+    ru-RU: questions_ru.csv
+    en-US: questions.csv
+  locale: en-US
+
+logging:
+  level:
+    root: ERROR
