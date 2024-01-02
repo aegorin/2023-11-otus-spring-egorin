@@ -1,0 +1,15 @@
+spring:
+  main:
+    banner-mode: off
+  shell:
+    history:
+      enabled: false
+  datasource:
+    url: jdbc:h2:mem:book_catalogue
+    user: sa
+    password: 1
+    driverClassName: org.h2.Driver
+
+logging:
+  level:
+    root: OFF
