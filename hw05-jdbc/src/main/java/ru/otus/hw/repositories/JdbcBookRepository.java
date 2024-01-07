@@ -1,7 +1,6 @@
 package ru.otus.hw.repositories;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -35,18 +34,14 @@ public class JdbcBookRepository implements BookRepository {
 
     @Override
     public Optional<Book> findById(long id) {
-        try {
-            var book = namedJdbc.queryForObject("""
+        var bookList = namedJdbc.query("""
                 SELECT b.id, b.title, b.author_id, b.genre_id,
                 a.full_name AS author_name, g.name AS genre_name
                 FROM books AS b
                 JOIN authors AS a ON a.id = b.author_id
                 JOIN genres AS g ON g.id = b.genre_id
                 WHERE b.id = :book_id""", Map.of("book_id", id), new BookRowMapper());
-            return Optional.ofNullable(book);
-        } catch (IncorrectResultSizeDataAccessException ex) {
-            return Optional.empty();
-        }
+        return bookList.isEmpty() ? Optional.empty() : Optional.of(bookList.get(0));
     }
 
     @Override

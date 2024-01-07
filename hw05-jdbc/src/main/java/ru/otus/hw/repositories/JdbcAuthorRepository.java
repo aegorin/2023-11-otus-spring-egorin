@@ -24,9 +24,9 @@ public class JdbcAuthorRepository implements AuthorRepository {
 
     @Override
     public Optional<Author> findById(long id) {
-        var author = namedJdbc.queryForObject(
+        var authorList = namedJdbc.query(
                 "SELECT id, full_name FROM authors WHERE id = :id", Map.of("id", id), new AuthorRowMapper());
-        return Optional.ofNullable(author);
+        return authorList.isEmpty() ? Optional.empty() : Optional.of(authorList.get(0));
     }
 
     private static class AuthorRowMapper implements RowMapper<Author> {

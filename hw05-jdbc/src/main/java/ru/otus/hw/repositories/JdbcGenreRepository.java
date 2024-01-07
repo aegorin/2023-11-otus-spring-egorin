@@ -24,9 +24,9 @@ public class JdbcGenreRepository implements GenreRepository {
 
     @Override
     public Optional<Genre> findById(long id) {
-        var genre = namedJdbc.queryForObject(
+        var genreList = namedJdbc.query(
                 "SELECT id, name FROM genres WHERE id = :id", Map.of("id", id), new GenreRowMapper());
-        return Optional.ofNullable(genre);
+        return genreList.isEmpty() ? Optional.empty() : Optional.of(genreList.get(0));
     }
 
     private static class GenreRowMapper implements RowMapper<Genre> {
