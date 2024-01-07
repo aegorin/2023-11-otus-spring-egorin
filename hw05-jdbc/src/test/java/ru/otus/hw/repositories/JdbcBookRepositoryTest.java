@@ -20,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @JdbcTest
-@Import(BookRepositoryJdbc.class)
-class BookRepositoryJdbcTest {
+@Import(JdbcBookRepository.class)
+class JdbcBookRepositoryTest {
     @Autowired
-    private BookRepositoryJdbc bookRepository;
+    private JdbcBookRepository bookRepository;
 
     private List<Author> dbAuthors;
 

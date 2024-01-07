@@ -11,8 +11,8 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
-@Import(GenreRepositoryJdbc.class)
-class GenreRepositoryJdbcTest {
+@Import(JdbcGenreRepository.class)
+class JdbcGenreRepositoryTest {
     @Autowired
     private GenreRepository genreRepository;
 

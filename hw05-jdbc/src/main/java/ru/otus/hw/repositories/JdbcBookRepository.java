@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class BookRepositoryJdbc implements BookRepository {
+public class JdbcBookRepository implements BookRepository {
     private final NamedParameterJdbcOperations namedJdbc;
 
     @Override
