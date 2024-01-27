@@ -3,10 +3,9 @@ package ru.otus.hw.repositories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Author;
@@ -19,11 +18,14 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-@JdbcTest
-@Import(JdbcBookRepository.class)
-class JdbcBookRepositoryTest {
+@DataJpaTest
+@Import(JpaBookRepository.class)
+class JpaBookRepositoryTest {
     @Autowired
-    private JdbcBookRepository bookRepository;
+    private JpaBookRepository bookRepository;
+
+    @Autowired
+    private TestEntityManager em;
 
     private List<Author> dbAuthors;
 
@@ -39,12 +41,14 @@ class JdbcBookRepositoryTest {
     }
     
     @DisplayName("должен загружать книгу по id")
-    @ParameterizedTest
-    @MethodSource("getDbBooks")
-    void shouldReturnCorrectBookById(Book expectedBook) {
-        var actualBook = bookRepository.findById(expectedBook.getId());
-        assertThat(actualBook).isPresent()
+    @Test
+    void shouldReturnCorrectBookById() {
+        var actualBook = bookRepository.findById(1);
+        var expectedBook = em.find(Book.class, 1);
+        assertThat(actualBook)
+                .isNotEmpty()
                 .get()
+                .usingRecursiveComparison()
                 .isEqualTo(expectedBook);
     }
 
@@ -55,43 +59,37 @@ class JdbcBookRepositoryTest {
         List<Book> expectedBooks = dbBooks;
 
         assertThat(actualBooks).containsExactlyElementsOf(expectedBooks);
-        actualBooks.forEach(System.out::println);
     }
     
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
         var expectedBook = new Book(0, "BookTitle_10500", dbAuthors.get(0), dbGenres.get(0));
-        var returnedBook = bookRepository.save(expectedBook);
-        assertThat(returnedBook).isNotNull()
-                .matches(book -> book.getId() > 0)
-                .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
+        expectedBook = bookRepository.save(expectedBook);
 
-        assertThat(bookRepository.findById(returnedBook.getId()))
-                .isPresent()
-                .get()
-                .isEqualTo(returnedBook);
+        var actualBook = em.find(Book.class, expectedBook.getId());
+        assertThat(expectedBook)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(actualBook);
     }
     
     @DisplayName("должен сохранять изменённую книгу")
     @Test
     void shouldSaveUpdatedBook() {
-        var expectedBook = new Book(1L, "BookTitle_10500", dbAuthors.get(2), dbGenres.get(2));
-
-        assertThat(bookRepository.findById(expectedBook.getId()))
-                .isPresent()
-                .get()
+        final var expectedBook = new Book(1L, "BookTitle_10500", dbAuthors.get(2), dbGenres.get(2));
+        var actualBook = em.find(Book.class, expectedBook.getId());
+        assertThat(actualBook)
+                .isNotNull()
                 .isNotEqualTo(expectedBook);
 
-        var returnedBook = bookRepository.save(expectedBook);
-        assertThat(returnedBook).isNotNull()
-                .matches(book -> book.getId() > 0)
-                .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
+        bookRepository.save(expectedBook);
+        actualBook = em.find(Book.class, expectedBook.getId());
 
-        assertThat(bookRepository.findById(returnedBook.getId()))
-                .isPresent()
-                .get()
-                .isEqualTo(returnedBook);
+        assertThat(actualBook)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(expectedBook);
     }
 
     @DisplayName("должно быть исключение если книга не обновлена в базе")
@@ -105,9 +103,19 @@ class JdbcBookRepositoryTest {
     @DisplayName("должен удалять книгу по id ")
     @Test
     void shouldDeleteBook() {
-        assertThat(bookRepository.findById(1L)).isPresent();
-        bookRepository.deleteById(1L);
-        assertThat(bookRepository.findById(1L)).isEmpty();
+        var firstBook = em.find(Book.class, 1);
+        assertThat(firstBook).isNotNull();
+
+        bookRepository.deleteById(firstBook.getId());
+
+        assertThat(em.find(Book.class, firstBook.getId())).isNull();
+    }
+
+    @DisplayName("должно быть исключение при удалении книги по несуществующему id")
+    @Test
+    void shouldExceptionWhereDeleteUnpersistedBook() {
+        assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(() -> bookRepository.deleteById(Integer.MIN_VALUE));
     }
 
     private static List<Author> getDbAuthors() {
@@ -126,11 +134,5 @@ class JdbcBookRepositoryTest {
         return IntStream.range(1, 4).boxed()
                 .map(id -> new Book(id, "Book_" + id, dbAuthors.get(id - 1), dbGenres.get(id - 1)))
                 .toList();
-    }
-
-    private static List<Book> getDbBooks() {
-        var dbAuthors = getDbAuthors();
-        var dbGenres = getDbGenres();
-        return getDbBooks(dbAuthors, dbGenres);
     }
 }
