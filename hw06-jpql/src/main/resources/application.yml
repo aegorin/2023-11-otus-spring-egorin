@@ -9,6 +9,10 @@ spring:
     user: sa
     password: 1
     driverClassName: org.h2.Driver
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
 
   liquibase:
     change-log: classpath:db/changelog/changelog.yml
