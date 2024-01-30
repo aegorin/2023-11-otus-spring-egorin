@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BookCommentDto {
+public class CommentDto {
     private long id;
 
     private String comment;

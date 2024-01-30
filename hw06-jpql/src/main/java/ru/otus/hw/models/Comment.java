@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "book_comments")
-public class BookComment {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -28,7 +28,7 @@ public class BookComment {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    public BookComment(Book book) {
+    public Comment(Book book) {
         this.book = book;
     }
 }
