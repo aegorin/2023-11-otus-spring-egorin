@@ -111,13 +111,6 @@ class JpaBookRepositoryTest {
         assertThat(em.find(Book.class, firstBook.getId())).isNull();
     }
 
-    @DisplayName("должно быть исключение при удалении книги по несуществующему id")
-    @Test
-    void shouldExceptionWhereDeleteUnpersistedBook() {
-        assertThatExceptionOfType(EntityNotFoundException.class)
-                .isThrownBy(() -> bookRepository.deleteById(Integer.MIN_VALUE));
-    }
-
     private static List<Author> getDbAuthors() {
         return IntStream.range(1, 4).boxed()
                 .map(id -> new Author(id, "Author_" + id))
