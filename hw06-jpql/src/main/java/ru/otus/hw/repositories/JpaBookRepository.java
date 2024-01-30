@@ -38,12 +38,7 @@ public class JpaBookRepository implements BookRepository {
             entityManager.persist(book);
             return book;
         }
-        try {
-            entityManager.getReference(Book.class, book.getId());
-            return entityManager.merge(book);
-        } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("no rows updated");
-        }
+        return entityManager.merge(book);
     }
 
     @Override
