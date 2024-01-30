@@ -35,16 +35,11 @@ public class JpaBookCommentRepository implements BookCommentRepository {
 
     @Override
     public BookComment save(BookComment bookComment) {
-        if (bookComment.getId() > 0) {
+        if (bookComment.getId() == 0) {
             entityManager.persist(bookComment);
             return bookComment;
         }
-        try {
-            entityManager.getReference(BookComment.class, bookComment.getId());
-            return entityManager.merge(bookComment);
-        } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("no rows updated");
-        }
+        return entityManager.merge(bookComment);
     }
 
     @Override

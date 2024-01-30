@@ -82,15 +82,6 @@ class JpaBookCommentRepositoryTest {
     }
 
     @Test
-    void shouldExceptionWhenUpdateNotPersistedComment() {
-        var notPersisted = new BookComment();
-        notPersisted.setId(Integer.MIN_VALUE);
-
-        assertThatExceptionOfType(EntityNotFoundException.class)
-                .isThrownBy(() -> commentRepository.save(notPersisted));
-    }
-
-    @Test
     void shoudDeleteCommentById() {
         var comment = em.find(BookComment.class, 1);
         assertThat(comment).isNotNull();
