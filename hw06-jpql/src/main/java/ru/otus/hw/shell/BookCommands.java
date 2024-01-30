@@ -29,8 +29,8 @@ public class BookCommands {
     }
 
     @Command(command = "bins", description = "Insert book")
-    public String insertBook(String title, long authorId, long genreId) {
-        var savedBook = bookService.insert(title, authorId, genreId);
+    public String createBook(String title, long authorId, long genreId) {
+        var savedBook = bookService.create(title, authorId, genreId);
         return bookConverter.bookToString(savedBook);
     }
 
