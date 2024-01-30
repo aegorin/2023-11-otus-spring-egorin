@@ -34,24 +34,19 @@ public class BookCommentServiceImpl implements BookCommentService {
     @Transactional
     @Override
     public BookCommentDto updateBookComment(long commentId, String commentText) {
-        var optBookComment = bookCommentRepository.findById(commentId);
-        if (optBookComment.isEmpty()) {
-            throw new EntityNotFoundException("Comment with id %d not found".formatted(commentId));
-        }
-        BookComment bookComment = optBookComment.get();
-        bookComment.setComment(commentText);
-        bookComment = bookCommentRepository.save(bookComment);
-        return bookCommentConverter.from(bookComment);
+        var comment = bookCommentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment with id %d not found".formatted(commentId)));
+        comment.setComment(commentText);
+        comment = bookCommentRepository.save(comment);
+        return bookCommentConverter.from(comment);
     }
 
     @Transactional
     @Override
     public BookCommentDto addBookComment(long bookId, String commentText) {
-        var book = bookRepository.findById(bookId);
-        if (book.isEmpty()) {
-            throw new EntityNotFoundException("Book with id %d not found".formatted(bookId));
-        }
-        BookComment bookComment = new BookComment(book.get());
+        var book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(bookId)));
+        BookComment bookComment = new BookComment(book);
         bookComment.setComment(commentText);
         bookComment = bookCommentRepository.save(bookComment);
         return bookCommentConverter.from(bookComment);
