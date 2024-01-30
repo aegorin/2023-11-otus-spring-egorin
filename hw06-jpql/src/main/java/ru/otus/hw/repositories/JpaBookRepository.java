@@ -43,11 +43,10 @@ public class JpaBookRepository implements BookRepository {
 
     @Override
     public void deleteById(long id) {
-        try {
-            var book = entityManager.find(Book.class, id);
-            entityManager.remove(book);
-        } catch (jakarta.persistence.EntityNotFoundException e) {
+        var book = entityManager.find(Book.class, id);
+        if (book == null) {
             throw new EntityNotFoundException("no rows updated");
         }
+        entityManager.remove(book);
     }
 }

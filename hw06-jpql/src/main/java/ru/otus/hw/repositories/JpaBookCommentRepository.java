@@ -44,11 +44,10 @@ public class JpaBookCommentRepository implements BookCommentRepository {
 
     @Override
     public void deleteById(long commentId) {
-        try {
-            var comment = entityManager.getReference(BookComment.class, commentId);
-            entityManager.remove(comment);
-        } catch (jakarta.persistence.EntityNotFoundException e) {
+        var comment = entityManager.find(BookComment.class, commentId);
+        if (comment == null) {
             throw new EntityNotFoundException("no rows updated");
         }
+        entityManager.remove(comment);
     }
 }
