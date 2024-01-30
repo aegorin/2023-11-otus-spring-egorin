@@ -13,18 +13,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DataJpaTest
-@Import(JpaBookCommentRepository.class)
+@Import(value = {JpaBookCommentRepository.class, JpaBookRepository.class})
 class JpaBookCommentRepositoryTest {
 
     @Autowired
-    private JpaBookCommentRepository repositoryJpa;
+    private BookCommentRepository commentRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Autowired
     private TestEntityManager em;
 
     @Test
     void shouldFindCommentById() {
-        var actualComment = repositoryJpa.findById(1);
+        var actualComment = commentRepository.findById(1);
         var expected = em.find(BookComment.class, 1);
         assertThat(actualComment)
                 .isPresent()
@@ -35,7 +38,7 @@ class JpaBookCommentRepositoryTest {
 
     @Test
     void shouldReturnEmptyCommentListWhenBookAbsent() {
-        var comments = repositoryJpa.findByBookId(Integer.MIN_VALUE);
+        var comments = commentRepository.findByBookId(Integer.MIN_VALUE);
         assertThat(comments).isEmpty();
     }
 
@@ -43,7 +46,7 @@ class JpaBookCommentRepositoryTest {
     void shouldReturnCommentsByBookId() {
         var comment1 = em.find(BookComment.class, 1);
         var comment2 = em.find(BookComment.class, 2);
-        var comments = repositoryJpa.findByBookId(1);
+        var comments = commentRepository.findByBookId(1);
 
         assertThat(comments).containsExactlyInAnyOrder(comment1, comment2);
     }
@@ -54,7 +57,7 @@ class JpaBookCommentRepositoryTest {
         var comment = new BookComment(book);
         comment.setComment("new comment");
 
-        var actual = repositoryJpa.save(comment);
+        var actual = commentRepository.save(comment);
         var expected = em.find(BookComment.class, actual.getId());
         assertThat(actual)
                 .isNotNull()
@@ -67,7 +70,7 @@ class JpaBookCommentRepositoryTest {
         var comment = em.find(BookComment.class, 1);
         comment.setComment(java.util.UUID.randomUUID().toString());
 
-        var actual = repositoryJpa.save(comment);
+        var actual = commentRepository.save(comment);
         em.flush();
         em.detach(actual);
 
@@ -84,7 +87,7 @@ class JpaBookCommentRepositoryTest {
         notPersisted.setId(Integer.MIN_VALUE);
 
         assertThatExceptionOfType(EntityNotFoundException.class)
-                .isThrownBy(() -> repositoryJpa.save(notPersisted));
+                .isThrownBy(() -> commentRepository.save(notPersisted));
     }
 
     @Test
@@ -92,7 +95,7 @@ class JpaBookCommentRepositoryTest {
         var comment = em.find(BookComment.class, 1);
         assertThat(comment).isNotNull();
 
-        repositoryJpa.deleteById(comment.getId());
+        commentRepository.deleteById(comment.getId());
 
         assertThat(em.find(BookComment.class, 1)).isNull();
     }
@@ -100,6 +103,18 @@ class JpaBookCommentRepositoryTest {
     @Test
     void shoudExceptionWhenDeleteNotPersistedCommentById() {
         assertThatExceptionOfType(EntityNotFoundException.class)
-                .isThrownBy(() -> repositoryJpa.deleteById(Integer.MIN_VALUE));
+                .isThrownBy(() -> commentRepository.deleteById(Integer.MIN_VALUE));
+    }
+
+    @Test
+    void shouldDeleteCommentsWhenDeleteBook() {
+        var book = em.find(Book.class, 1);
+        var comments = commentRepository.findByBookId(book.getId());
+        assertThat(comments).isNotEmpty();
+
+        bookRepository.deleteById(book.getId());
+        em.flush();
+
+        assertThat(commentRepository.findByBookId(book.getId())).isEmpty();
     }
 }
