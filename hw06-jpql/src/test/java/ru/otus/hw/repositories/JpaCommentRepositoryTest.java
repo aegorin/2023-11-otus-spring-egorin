@@ -5,12 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DataJpaTest
 @Import(value = {JpaCommentRepository.class, JpaBookRepository.class})
@@ -89,12 +87,6 @@ class JpaCommentRepositoryTest {
         commentRepository.deleteById(comment.getId());
 
         assertThat(em.find(Comment.class, 1)).isNull();
-    }
-
-    @Test
-    void shoudExceptionWhenDeleteNotPersistedCommentById() {
-        assertThatExceptionOfType(EntityNotFoundException.class)
-                .isThrownBy(() -> commentRepository.deleteById(Integer.MIN_VALUE));
     }
 
     @Test

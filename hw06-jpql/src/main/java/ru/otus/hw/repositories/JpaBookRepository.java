@@ -45,7 +45,7 @@ public class JpaBookRepository implements BookRepository {
     public void deleteById(long id) {
         var book = entityManager.find(Book.class, id);
         if (book == null) {
-            throw new EntityNotFoundException("no rows updated");
+            return;
         }
         entityManager.remove(book);
     }
