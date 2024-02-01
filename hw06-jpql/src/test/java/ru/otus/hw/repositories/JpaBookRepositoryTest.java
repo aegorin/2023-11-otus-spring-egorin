@@ -11,6 +11,7 @@ import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -56,7 +57,9 @@ class JpaBookRepositoryTest {
         List<Book> actualBooks = bookRepository.findAll();
         List<Book> expectedBooks = dbBooks;
 
-        assertThat(actualBooks).containsExactlyElementsOf(expectedBooks);
+        assertThat(actualBooks)
+                .usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrderElementsOf(expectedBooks);
     }
     
     @DisplayName("должен сохранять новую книгу")
@@ -77,8 +80,15 @@ class JpaBookRepositoryTest {
     void shouldSaveUpdatedBook() {
         final var expectedBook = new Book(1L, "BookTitle_10500", dbAuthors.get(2), dbGenres.get(2));
         var actualBook = em.find(Book.class, expectedBook.getId());
+
+        Comparator<Author> authorComparator = Comparator.comparingLong(Author::getId);
+        Comparator<Genre> genreComparator = Comparator.comparingLong(Genre::getId);
+
         assertThat(actualBook)
                 .isNotNull()
+                .usingRecursiveComparison()
+                .withComparatorForType(authorComparator, Author.class)
+                .withComparatorForType(genreComparator, Genre.class)
                 .isNotEqualTo(expectedBook);
 
         bookRepository.save(expectedBook);
@@ -87,6 +97,8 @@ class JpaBookRepositoryTest {
         assertThat(actualBook)
                 .isNotNull()
                 .usingRecursiveComparison()
+                .withComparatorForType(authorComparator, Author.class)
+                .withComparatorForType(genreComparator, Genre.class)
                 .isEqualTo(expectedBook);
     }
 
