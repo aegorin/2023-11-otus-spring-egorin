@@ -10,4 +10,5 @@
 Задание №3 в папке [hw03-spring-boot](./hw03-spring-boot) ветка [hw03](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw03).\
 Задание №4 в папке [hw04-spring-shell](./hw04-spring-shell) ветка [hw04](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw04).
 
-Задание №5 в папке [hw05-jdbc](./hw05-jdbc) ветка [hw05](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw05).
+Задание №5 в папке [hw05-jdbc](./hw05-jdbc) ветка [hw05](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw05).\
+Задание №6 в папке [hw06-jpql](./hw06-jpql) ветка [hw06](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw06).
