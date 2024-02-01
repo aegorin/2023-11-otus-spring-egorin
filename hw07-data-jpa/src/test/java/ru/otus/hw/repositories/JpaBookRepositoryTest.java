@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -18,10 +17,9 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(JpaBookRepository.class)
 class JpaBookRepositoryTest {
     @Autowired
-    private JpaBookRepository bookRepository;
+    private BookRepository bookRepository;
 
     @Autowired
     private TestEntityManager em;
@@ -42,7 +40,7 @@ class JpaBookRepositoryTest {
     @DisplayName("должен загружать книгу по id")
     @Test
     void shouldReturnCorrectBookById() {
-        var actualBook = bookRepository.findById(1);
+        var actualBook = bookRepository.findById(1L);
         var expectedBook = em.find(Book.class, 1);
         assertThat(actualBook)
                 .isNotEmpty()
