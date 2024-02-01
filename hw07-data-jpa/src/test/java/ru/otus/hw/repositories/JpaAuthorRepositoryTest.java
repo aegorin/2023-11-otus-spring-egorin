@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Author;
 
 import java.util.stream.IntStream;
@@ -12,7 +11,6 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(JpaAuthorRepository.class)
 class JpaAuthorRepositoryTest {
     @Autowired
     private AuthorRepository authorRepository;
@@ -22,7 +20,7 @@ class JpaAuthorRepositoryTest {
 
     @Test
     void returnAuthorById() {
-        var actualAuthor = authorRepository.findById(1);
+        var actualAuthor = authorRepository.findById(1L);
         var expectedAuthor = em.find(Author.class, 1);
         assertThat(actualAuthor)
                 .isPresent()
@@ -33,7 +31,7 @@ class JpaAuthorRepositoryTest {
 
     @Test
     void returnEmptyWhenNotFound() {
-        assertThat(authorRepository.findById(-1))
+        assertThat(authorRepository.findById(-1L))
                 .isEmpty();
     }
 
