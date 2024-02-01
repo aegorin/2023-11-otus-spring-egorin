@@ -11,7 +11,7 @@ import ru.otus.hw.models.Comment;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(value = {JpaCommentRepository.class, JpaBookRepository.class})
+@Import(value = {JpaBookRepository.class})
 class JpaCommentRepositoryTest {
 
     @Autowired
@@ -25,7 +25,7 @@ class JpaCommentRepositoryTest {
 
     @Test
     void shouldFindCommentById() {
-        var actualComment = commentRepository.findById(1);
+        var actualComment = commentRepository.findById(1L);
         var expected = em.find(Comment.class, 1);
         assertThat(actualComment)
                 .isPresent()
@@ -36,7 +36,7 @@ class JpaCommentRepositoryTest {
 
     @Test
     void shouldReturnEmptyCommentListWhenBookAbsent() {
-        var comments = commentRepository.findByBookId(Integer.MIN_VALUE);
+        var comments = commentRepository.findByBookId(Long.MIN_VALUE);
         assertThat(comments).isEmpty();
     }
 
@@ -44,7 +44,7 @@ class JpaCommentRepositoryTest {
     void shouldReturnCommentsByBookId() {
         var comment1 = em.find(Comment.class, 1);
         var comment2 = em.find(Comment.class, 2);
-        var comments = commentRepository.findByBookId(1);
+        var comments = commentRepository.findByBookId(1L);
 
         assertThat(comments).containsExactlyInAnyOrder(comment1, comment2);
     }
