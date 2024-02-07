@@ -2,6 +2,8 @@ spring:
   shell:
     interactive:
       enabled: false
+    history:
+      enabled: false
   main:
     banner-mode: off
   messages:
