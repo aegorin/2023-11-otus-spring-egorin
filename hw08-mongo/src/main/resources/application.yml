@@ -1,0 +1,31 @@
+spring:
+  main:
+    banner-mode: off
+  shell:
+    history:
+      enabled: false
+    command:
+      version:
+        enabled: false
+  data:
+    mongodb:
+      database: egorin_av_booksdb
+      port: 0
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 6.0.4
+mongock:
+  #runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.mongock
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+logging:
+  level:
+    root: ERROR
