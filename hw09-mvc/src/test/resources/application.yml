@@ -1,0 +1,7 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+  liquibase:
+    change-log: classpath:db/changelog/changelog.yml
+    contexts: test
