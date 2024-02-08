@@ -14,7 +14,7 @@ public class CommentConverter {
     public CommentDto from(Comment comment) {
         return new CommentDto(
                 comment.getId(),
-                comment.getComment(),
+                comment.getText(),
                 comment.getBook().getId());
     }
 }

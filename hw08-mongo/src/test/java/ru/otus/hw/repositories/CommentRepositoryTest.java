@@ -62,7 +62,7 @@ class CommentRepositoryTest {
     void shouldSaveNewComment() {
         var book = mongoTemplate.findById("3", Book.class);
         var comment = new Comment(book);
-        comment.setComment("new comment");
+        comment.setText("new comment");
 
         var actual = commentRepository.save(comment);
         var expected = mongoTemplate.findById(actual.getId(), Comment.class);
@@ -75,7 +75,7 @@ class CommentRepositoryTest {
     @Test
     void shouldUpdateComment() {
         var comment = mongoTemplate.findById("1", Comment.class);
-        comment.setComment(java.util.UUID.randomUUID().toString());
+        comment.setText(java.util.UUID.randomUUID().toString());
 
         var actual = commentRepository.save(comment);
 

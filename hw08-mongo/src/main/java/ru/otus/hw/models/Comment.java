@@ -17,7 +17,7 @@ public class Comment {
     private String id;
 
     @Field
-    private String comment;
+    private String text;
 
     @DBRef(lazy = true)
     private Book book;

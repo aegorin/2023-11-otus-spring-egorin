@@ -36,7 +36,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto updateComment(String commentId, String commentText) {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment with id %s not found".formatted(commentId)));
-        comment.setComment(commentText);
+        comment.setText(commentText);
         comment = commentRepository.save(comment);
         return commentConverter.from(comment);
     }
@@ -47,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(bookId)));
         Comment comment = new Comment(book);
-        comment.setComment(commentText);
+        comment.setText(commentText);
         comment = commentRepository.save(comment);
         return commentConverter.from(comment);
     }

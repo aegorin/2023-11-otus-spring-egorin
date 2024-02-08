@@ -62,7 +62,7 @@ public class DatabaseChangelog {
             for (String text : bookComment.commentText()) {
                 Comment comment = new Comment(book);
                 comment.setId(Integer.toString(commentId++));
-                comment.setComment(text);
+                comment.setText(text);
                 mongoTemplate.insert(comment);
             }
         }

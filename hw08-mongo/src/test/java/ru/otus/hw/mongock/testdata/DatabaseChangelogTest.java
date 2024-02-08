@@ -31,18 +31,18 @@ public class DatabaseChangelogTest {
         var book = mongoTemplate.findById("1", Book.class);
         var comment = new Comment(book);
         comment.setId("1");
-        comment.setComment("Comment_1_book_1");
+        comment.setText("Comment_1_book_1");
         mongoTemplate.insert(comment);
 
         comment = new Comment(book);
         comment.setId("2");
-        comment.setComment("Comment_2_book_1");
+        comment.setText("Comment_2_book_1");
         mongoTemplate.insert(comment);
 
         book = mongoTemplate.findById("2", Book.class);
         comment = new Comment(book);
         comment.setId("3");
-        comment.setComment("Comment_1_book_2");
+        comment.setText("Comment_1_book_2");
         mongoTemplate.insert(comment);
     }
 }
