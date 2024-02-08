@@ -61,8 +61,7 @@ class CommentRepositoryTest {
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void shouldSaveNewComment() {
         var book = mongoTemplate.findById("3", Book.class);
-        var comment = new Comment(book);
-        comment.setText("new comment");
+        var comment = new Comment(book, "new comment");
 
         var actual = commentRepository.save(comment);
         var expected = mongoTemplate.findById(actual.getId(), Comment.class);

@@ -22,7 +22,8 @@ public class Comment {
     @DBRef(lazy = true)
     private Book book;
 
-    public Comment(Book book) {
+    public Comment(Book book, String text) {
         this.book = book;
+        this.text = text;
     }
 }

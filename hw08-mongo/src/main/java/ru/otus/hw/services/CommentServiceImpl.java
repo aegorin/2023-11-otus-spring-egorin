@@ -46,8 +46,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto addComment(String bookId, String commentText) {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(bookId)));
-        Comment comment = new Comment(book);
-        comment.setText(commentText);
+        Comment comment = new Comment(book, commentText);
         comment = commentRepository.save(comment);
         return commentConverter.from(comment);
     }

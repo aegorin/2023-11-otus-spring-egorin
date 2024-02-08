@@ -60,9 +60,8 @@ public class DatabaseChangelog {
         for (BookComment bookComment : prepareBookComments()) {
             var book = mongoTemplate.findById(bookComment.bookId(), Book.class);
             for (String text : bookComment.commentText()) {
-                Comment comment = new Comment(book);
+                Comment comment = new Comment(book, text);
                 comment.setId(Integer.toString(commentId++));
-                comment.setText(text);
                 mongoTemplate.insert(comment);
             }
         }
