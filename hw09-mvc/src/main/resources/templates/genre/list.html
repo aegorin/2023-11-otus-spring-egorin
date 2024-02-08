@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{ layout :: common_header(~{::title}) }">
+    <title>Список жанров</title>
+</head>
+<body>
+<div id="container">
+    <div th:replace="~{ layout :: navigation }"/>
+    <div id="content">
+        <h3>Список жанров</h3>
+        <table class="table-fill">
+            <tbody>
+            <tr th:each="genre : ${genres}">
+                <td th:text="${genre.name}">Genre</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
