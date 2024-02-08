@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{ layout :: common_header(~{::title}) }">
+    <title>Список авторов</title>
+</head>
+<body>
+<div id="container">
+    <div th:replace="~{ layout :: navigation }"/>
+    <div id="content">
+        <h3>Список книг</h3>
+        <table class="table-fill">
+            <thead>
+            <tr>
+                <th style="width: 10px;">&nbsp;</th>
+                <th>Наименование</th>
+                <th>Автор</th>
+                <th>Жанр</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books}">
+                <td style="padding:0;">
+                    <div style="white-space: nowrap; width: 40px; margin: 0 auto; color: transparent;">
+                        <a th:href="@{/book/__${book.id}__}"><img class="edit" title="Редактировать" /></a>
+                        <a th:href="@{/comment(bookId=${book.id})}"><img class="comment" title="Комментарии"/></a>
+                    </div>
+                </td>
+                <td th:text="${book.title}">Genre</td>
+                <td th:text="${book.author.fullName}">Genre</td>
+                <td th:text="${book.genre.name}">Genre</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
