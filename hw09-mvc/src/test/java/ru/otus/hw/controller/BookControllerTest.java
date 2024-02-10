@@ -14,10 +14,15 @@ import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.GenreService;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,5 +55,36 @@ class BookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("books", Matchers.hasSize(1)))
                 .andExpect(content().string(containsString("Title_of_book_1")));
+    }
+
+    @Test
+    void shouldEditBookById() throws Exception {
+        BookDto book = new BookDto(111, "Title_of_book_111",
+                new AuthorDto(111, "author"),
+                new GenreDto(111, "genre"));
+        given(bookService.findById(111L)).willReturn(Optional.of(book));
+        given(authorService.findAll()).willReturn(List.of(
+                new AuthorDto(0, "0"),
+                new AuthorDto(1, "1")));
+        given(genreService.findAll()).willReturn(List.of(new GenreDto(0, "0")));
+
+        mvc.perform(get("/book/111"))
+                .andExpect(view().name("book/form"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("book", Matchers.is(book)))
+                .andExpect(model().attribute("authors", Matchers.hasSize(2)))
+                .andExpect(model().attribute("genres", Matchers.hasSize(1)))
+                .andExpect(content().string(containsString("Редактирование книги")))
+                .andExpect(content().string(containsString("Title_of_book_111")));
+    }
+
+    @Test
+    void shouldUpdateBook() throws Exception {
+        mvc.perform(post("/book")
+                .param("id", "1")
+                .param("title", "test_updated_book")
+                .param("author.id", "2")
+                .param("genre.id", "3"));
+        verify(bookService, only()).update(1, "test_updated_book", 2, 3);
     }
 }

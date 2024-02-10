@@ -13,7 +13,7 @@ public interface BookService {
 
     Book create(String title, long authorId, long genreId);
 
-    Book update(long id, String title, long authorId, long genreId);
+    BookDto update(long id, String title, long authorId, long genreId);
 
     void deleteById(long id);
 }
