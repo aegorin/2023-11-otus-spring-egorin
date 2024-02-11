@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.GenreService;
@@ -40,6 +41,23 @@ public class BookController {
     @GetMapping("/book/{id}/delete")
     public String deleteBook(@PathVariable("id") long bookId) {
         bookService.deleteById(bookId);
+        return "redirect:/";
+    }
+
+    @GetMapping("/book")
+    public String newBook(Model model) {
+        model.addAttribute("book", new BookDto());
+        model.addAttribute("genres", genreService.findAll());
+        model.addAttribute("authors", authorService.findAll());
+        return "book/form";
+    }
+
+    @PostMapping(value = "/book", params = {"form_create_new_book"})
+    public String saveNewBook(HttpServletRequest request) {
+        String bookTitle = request.getParameter("title");
+        long authorId = Long.parseLong(request.getParameter("author.id"));
+        long genreId = Long.parseLong(request.getParameter("genre.id"));
+        bookService.create(bookTitle, authorId, genreId);
         return "redirect:/";
     }
 

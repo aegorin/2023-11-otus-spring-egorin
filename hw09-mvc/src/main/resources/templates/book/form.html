@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{ layout :: common_header(~{::title}) }">
-    <title>Редактирование книги</title>
+    <title th:if="${book.id &gt; 0}">Редактирование книги</title>
+    <title th:if="${book.id} eq 0">Добавление новой книги</title>
 </head>
 <body>
 <div id="container">
     <div th:replace="~{ layout :: navigation }"/>
     <div id="content">
-        <h3>Редактирование книги</h3>
+        <h3 th:if="${book.id &gt; 0}">Редактирование книги</h3>
+        <h3 th:if="${book.id} eq 0">Добавление новой книги</h3>
         <form method="post" th:action="@{/book}" th:object="${book}">
-            <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{id}" th:if="${book.id &gt; 0}"/>
+            <input type="hidden" name="form_create_new_book" value="true" th:if="${book.id} eq 0"/>
+
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 20px;">Наименование</td>
                     <td>
-                        <input type="text" th:field="*{title}" style="width: 100%;"/>
+                        <input type="text" th:field="*{title}" style="width: 100%;" required/>
                     </td>
                 </tr>
                 <tr>
@@ -41,7 +45,7 @@
                     <td colspan="3" style="text-align: right;">
                         <button type="submit" style="width: 90px;">Сохранить</button>
                         <a th:href="@{/}"><button type="button" style="width: 90px;">Отмена</button></a>
-                        <a th:href="@{/book/__*{id}__/delete}"><button type="button" style="width: 90px;">Удалить</button></a>
+                        <a th:href="@{/book/__*{id}__/delete}" th:if="${book.id &gt; 0}"><button type="button" style="width: 90px;">Удалить</button></a>
                     </td>
                 </tr>
             </table>

@@ -44,12 +44,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public Book create(String title, long authorId, long genreId) {
+    public BookDto create(String title, long authorId, long genreId) {
         var book = new Book();
         book.setTitle(title);
         book.setAuthor(authorById(authorId));
         book.setGenre(genreById(genreId));
-        return bookRepository.save(book);
+        book = bookRepository.save(book);
+        return bookConverter.toDto(book);
     }
 
     @Override

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
@@ -75,7 +76,8 @@ class BookControllerTest {
                 .andExpect(model().attribute("authors", Matchers.hasSize(2)))
                 .andExpect(model().attribute("genres", Matchers.hasSize(1)))
                 .andExpect(content().string(containsString("Редактирование книги")))
-                .andExpect(content().string(containsString("Title_of_book_111")));
+                .andExpect(content().string(containsString("Title_of_book_111")))
+                .andExpect(content().string(not(containsString("form_create_new_book"))));
     }
 
     @Test
@@ -92,5 +94,32 @@ class BookControllerTest {
                 .param("author.id", "2")
                 .param("genre.id", "3"));
         verify(bookService, only()).update(1, "test_updated_book", 2, 3);
+    }
+
+    @Test
+    void shouldCreateBook() throws Exception {
+        mvc.perform(post("/book")
+                .param("form_create_new_book", "true")
+                .param("title", "test_new_create_book")
+                .param("author.id", "33")
+                .param("genre.id", "22"));
+        verify(bookService, only()).create("test_new_create_book", 33, 22);
+    }
+
+    @Test
+    void shouldCreateNewBook() throws Exception {
+        given(authorService.findAll()).willReturn(List.of(
+                new AuthorDto(0, "0"),
+                new AuthorDto(1, "1")));
+        given(genreService.findAll()).willReturn(List.of(new GenreDto(0, "0")));
+
+        mvc.perform(get("/book"))
+                .andExpect(view().name("book/form"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("authors", Matchers.hasSize(2)))
+                .andExpect(model().attribute("genres", Matchers.hasSize(1)))
+                .andExpect(content().string(containsString("Добавление новой книги")))
+                .andExpect(content().string(not(containsString("Редактирование книги"))))
+                .andExpect(content().string(containsString("form_create_new_book")));
     }
 }
