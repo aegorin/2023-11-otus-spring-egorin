@@ -79,6 +79,12 @@ class BookControllerTest {
     }
 
     @Test
+    void shouldDeleteBook() throws Exception {
+        mvc.perform(get("/book/777/delete"));
+        verify(bookService, only()).deleteById(777);
+    }
+
+    @Test
     void shouldUpdateBook() throws Exception {
         mvc.perform(post("/book")
                 .param("id", "1")
