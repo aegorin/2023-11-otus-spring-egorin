@@ -54,7 +54,7 @@ public class BookController {
         return "book/form";
     }
 
-    @PostMapping(value = "/book", params = {"form_create_new_book"})
+    @PostMapping(value = "/book")
     public String saveNewBook(HttpServletRequest request) {
         String bookTitle = request.getParameter("title");
         long authorId = Long.parseLong(request.getParameter("author.id"));

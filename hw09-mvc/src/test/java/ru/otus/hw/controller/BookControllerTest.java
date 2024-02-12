@@ -77,8 +77,7 @@ class BookControllerTest {
                 .andExpect(model().attribute("authors", Matchers.hasSize(2)))
                 .andExpect(model().attribute("genres", Matchers.hasSize(1)))
                 .andExpect(content().string(containsString("Редактирование книги")))
-                .andExpect(content().string(containsString("Title_of_book_111")))
-                .andExpect(content().string(not(containsString("form_create_new_book"))));
+                .andExpect(content().string(containsString("Title_of_book_111")));
     }
 
     @Test
@@ -100,7 +99,6 @@ class BookControllerTest {
     @Test
     void shouldCreateBook() throws Exception {
         mvc.perform(post("/book")
-                .param("form_create_new_book", "true")
                 .param("title", "test_new_create_book")
                 .param("author.id", "33")
                 .param("genre.id", "22"));
@@ -120,7 +118,6 @@ class BookControllerTest {
                 .andExpect(model().attribute("authors", Matchers.hasSize(2)))
                 .andExpect(model().attribute("genres", Matchers.hasSize(1)))
                 .andExpect(content().string(containsString("Добавление новой книги")))
-                .andExpect(content().string(not(containsString("Редактирование книги"))))
-                .andExpect(content().string(containsString("form_create_new_book")));
+                .andExpect(content().string(not(containsString("Редактирование книги"))));
     }
 }

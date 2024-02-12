@@ -12,7 +12,6 @@
         <h3 th:if="${book.id} eq 0">Добавление новой книги</h3>
         <form th:method="${book.id &gt; 0} ? put : post" th:action="@{/book}" th:object="${book}" id="book_form">
             <input type="hidden" th:field="*{id}" th:if="${book.id &gt; 0}"/>
-            <input type="hidden" name="form_create_new_book" value="true" th:if="${book.id} eq 0"/>
         </form>
         <table style="width: 100%;">
             <tr>
