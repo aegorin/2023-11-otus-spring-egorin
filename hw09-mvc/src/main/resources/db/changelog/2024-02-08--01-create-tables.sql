@@ -23,7 +23,7 @@ CREATE TABLE books (
   CONSTRAINT genre_fk FOREIGN KEY(genre_id) REFERENCES genres(id)
 );
 
-CREATE TABLE book_comments (
+CREATE TABLE comments (
   id BIGINT AUTO_INCREMENT,
   text VARCHAR(1024) NOT NULL,
   book_id BIGINT NOT NULL,
