@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.not;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -81,7 +82,7 @@ class BookControllerTest {
 
     @Test
     void shouldDeleteBook() throws Exception {
-        mvc.perform(get("/book/777/delete"));
+        mvc.perform(delete("/book/delete/777"));
         verify(bookService, only()).deleteById(777);
     }
 

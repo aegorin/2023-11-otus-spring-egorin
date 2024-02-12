@@ -8,6 +8,10 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: none
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
 
   liquibase:
     change-log: classpath:db/changelog/changelog.yml

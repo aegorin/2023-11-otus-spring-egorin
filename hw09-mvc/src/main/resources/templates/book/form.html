@@ -10,46 +10,48 @@
     <div id="content">
         <h3 th:if="${book.id &gt; 0}">Редактирование книги</h3>
         <h3 th:if="${book.id} eq 0">Добавление новой книги</h3>
-        <form method="post" th:action="@{/book}" th:object="${book}">
+        <form method="post" th:action="@{/book}" th:object="${book}" id="book_form">
             <input type="hidden" th:field="*{id}" th:if="${book.id &gt; 0}"/>
             <input type="hidden" name="form_create_new_book" value="true" th:if="${book.id} eq 0"/>
-
-            <table style="width: 100%;">
-                <tr>
-                    <td style="width: 20px;">Наименование</td>
-                    <td>
-                        <input type="text" th:field="*{title}" style="width: 100%;" required/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Автор</td>
-                    <td>
-                        <select th:field="*{author.id}">
-                            <option th:each="author : ${authors}"
-                                    th:value="${author.id}"
-                                    th:text="${author.fullName}">Автор</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Жанр</td>
-                    <td>
-                        <select th:field="*{genre.id}">
-                            <option th:each="genre : ${genres}"
-                                    th:value="${genre.id}"
-                                    th:text="${genre.name}">Жанр</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: right;">
-                        <button type="submit" style="width: 90px;">Сохранить</button>
-                        <a th:href="@{/}"><button type="button" style="width: 90px;">Отмена</button></a>
-                        <a th:href="@{/book/__*{id}__/delete}" th:if="${book.id &gt; 0}"><button type="button" style="width: 90px;">Удалить</button></a>
-                    </td>
-                </tr>
-            </table>
         </form>
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 20px;">Наименование</td>
+                <td>
+                    <input type="text" th:field="${book.title}" style="width: 100%;" form="book_form" required/>
+                </td>
+            </tr>
+            <tr>
+                <td>Автор</td>
+                <td>
+                    <select th:field="${book.author.id}" form="book_form">
+                        <option th:each="author : ${authors}"
+                                th:value="${author.id}"
+                                th:text="${author.fullName}">Автор</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Жанр</td>
+                <td>
+                    <select th:field="${book.genre.id}" form="book_form">
+                        <option th:each="genre : ${genres}"
+                                th:value="${genre.id}"
+                                th:text="${genre.name}">Жанр</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: right;">
+                    <button type="submit" form="book_form" style="width: 90px;">Сохранить</button>
+                    <a th:href="@{/}"><button type="button" style="width: 90px;">Отмена</button></a>
+
+                    <form th:if="${book.id &gt; 0}" th:method="delete" th:action="@{/book/delete/__*{id}__}" style="display: inline;" >
+                        <button type="submit" style="width: 90px;">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 </body>
