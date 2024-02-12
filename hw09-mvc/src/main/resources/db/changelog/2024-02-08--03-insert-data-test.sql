@@ -16,7 +16,7 @@ INSERT INTO books(id, title, author_id, genre_id) VALUES
 (DEFAULT, 'Book_2', 2, 2),
 (DEFAULT, 'Book_3', 3, 3);
 
-INSERT INTO book_comments(book_id, comment_text)
+INSERT INTO book_comments(book_id, text)
 VALUES
 (1, 'Comment_1_book_1'),
 (1, 'Comment_2_book_1'),
