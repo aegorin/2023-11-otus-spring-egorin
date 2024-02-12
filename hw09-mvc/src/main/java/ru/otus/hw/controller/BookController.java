@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
@@ -62,7 +63,7 @@ public class BookController {
         return "redirect:/";
     }
 
-    @PostMapping(value = "/book", params = {"id"})
+    @PutMapping(value = "/book")
     public String updateBook(HttpServletRequest request) {
         long bookId = Long.parseLong(request.getParameter("id"));
         String bookTitle = request.getParameter("title");

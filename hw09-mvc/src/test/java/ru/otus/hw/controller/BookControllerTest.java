@@ -24,6 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -88,7 +89,7 @@ class BookControllerTest {
 
     @Test
     void shouldUpdateBook() throws Exception {
-        mvc.perform(post("/book")
+        mvc.perform(put("/book")
                 .param("id", "1")
                 .param("title", "test_updated_book")
                 .param("author.id", "2")
