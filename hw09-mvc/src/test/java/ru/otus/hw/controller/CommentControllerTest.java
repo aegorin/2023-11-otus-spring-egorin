@@ -8,7 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
-import ru.otus.hw.dto.CommentDto;
+import ru.otus.hw.dto.CommentUpdateDto;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.CommentService;
@@ -35,14 +35,12 @@ class CommentControllerTest {
 
     @Test
     void shouldReturnAllCommentsForBook() throws Exception {
-        BookDto book = new BookDto(1, "Title_of_book_1",
-                new AuthorDto(0, "author"),
-                new GenreDto(0, "genre"));
+        BookDto book = new BookDto(1, "Title_of_book_1", new AuthorDto(), new GenreDto());
 
         given(bookService.findById(1)).willReturn(book);
         given(commentService.findByBookId(1)).willReturn(List.of(
-                new CommentDto(1, "1", 1),
-                new CommentDto(2, "2", 1)));
+                new CommentUpdateDto(1, "1", 1),
+                new CommentUpdateDto(2, "2", 1)));
 
         mvc.perform(get("/book/comment/1"))
                 .andExpect(view().name("comment/list"))

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CommentDto {
+public class CommentUpdateDto {
     private long id;
 
     private String text;

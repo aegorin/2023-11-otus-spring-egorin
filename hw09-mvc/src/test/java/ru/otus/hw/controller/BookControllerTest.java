@@ -50,8 +50,8 @@ class BookControllerTest {
     @Test
     void shouldReturnCorrectBookList() throws Exception {
         BookDto book = new BookDto(1, "Title_of_book_1",
-                new AuthorDto(0, "author"),
-                new GenreDto(0, "genre"));
+                new AuthorDto(0, "Author"),
+                new GenreDto(0, "Genre"));
         given(bookService.findAll()).willReturn(Collections.singletonList(book));
 
         mvc.perform(get("/"))
@@ -64,8 +64,8 @@ class BookControllerTest {
     @Test
     void shouldEditBookById() throws Exception {
         BookDto book = new BookDto(111, "Title_of_book_111",
-                new AuthorDto(111, "author"),
-                new GenreDto(111, "genre"));
+                new AuthorDto(7, "Author"),
+                new GenreDto(9, "Genre"));
         given(bookService.findById(111L)).willReturn(book);
         given(authorService.findAll()).willReturn(List.of(
                 new AuthorDto(0, "0"),
@@ -75,7 +75,7 @@ class BookControllerTest {
         mvc.perform(get("/book/111"))
                 .andExpect(view().name("book/form_edit_book"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("book", Matchers.is(new BookUpdateDto(book.getId(), book.getTitle(), 111, 111))))
+                .andExpect(model().attribute("book", Matchers.is(new BookUpdateDto(book.getId(), book.getTitle(), 7, 9))))
                 .andExpect(model().attribute("authors", Matchers.hasSize(2)))
                 .andExpect(model().attribute("genres", Matchers.hasSize(1)))
                 .andExpect(content().string(containsString("Редактирование книги")))

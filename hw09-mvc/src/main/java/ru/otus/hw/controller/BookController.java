@@ -34,11 +34,12 @@ public class BookController {
 
     @GetMapping("/book/{id}")
     public String editBook(@PathVariable("id") long bookId, Model model) {
-        var book = bookService.findById(bookId);
-        var updateDto = new BookUpdateDto(book.getId(), book.getTitle(),
-                book.getAuthor().getId(),
-                book.getGenre().getId());
-        model.addAttribute("book", updateDto);
+        var bookDto = bookService.findById(bookId);
+        var bookUpdateDto = new BookUpdateDto(bookDto.getId(),
+                bookDto.getTitle(),
+                bookDto.getAuthor().getId(),
+                bookDto.getGenre().getId());
+        model.addAttribute("book", bookUpdateDto);
         model.addAttribute("genres", genreService.findAll());
         model.addAttribute("authors", authorService.findAll());
         return "book/form_edit_book";

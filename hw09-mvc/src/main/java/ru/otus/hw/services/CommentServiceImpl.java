@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.controller.NotFoundException;
-import ru.otus.hw.converters.CommentConverter;
-import ru.otus.hw.dto.CommentDto;
+import ru.otus.hw.dto.CommentUpdateDto;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.CommentRepository;
 import ru.otus.hw.repositories.BookRepository;
@@ -21,34 +20,32 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
-    private final CommentConverter commentConverter;
-
     @Transactional(readOnly = true)
     @Override
-    public List<CommentDto> findByBookId(long bookId) {
+    public List<CommentUpdateDto> findByBookId(long bookId) {
         return commentRepository.findByBookId(bookId).stream()
-                .map(commentConverter::from)
+                .map(c -> new CommentUpdateDto(c.getId(), c.getText(), bookId))
                 .collect(Collectors.toList());
     }
 
     @Transactional
     @Override
-    public CommentDto updateComment(long commentId, String commentText) {
+    public CommentUpdateDto updateComment(long commentId, String commentText) {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Comment with id %d not found".formatted(commentId)));
         comment.setText(commentText);
         comment = commentRepository.save(comment);
-        return commentConverter.from(comment);
+        return new CommentUpdateDto(comment.getId(), comment.getText(), comment.getBook().getId());
     }
 
     @Transactional
     @Override
-    public CommentDto addComment(long bookId, String commentText) {
+    public CommentUpdateDto addComment(long bookId, String commentText) {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(bookId)));
         Comment comment = new Comment(book, commentText);
         comment = commentRepository.save(comment);
-        return commentConverter.from(comment);
+        return new CommentUpdateDto(comment.getId(), comment.getText(), comment.getBook().getId());
     }
 
     @Transactional
