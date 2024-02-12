@@ -44,7 +44,7 @@ class CommentControllerTest {
                 new CommentDto(1, "1", 1),
                 new CommentDto(2, "2", 1)));
 
-        mvc.perform(get("/comment").param("bookId", "1"))
+        mvc.perform(get("/book/comment/1"))
                 .andExpect(view().name("comment/list"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("book", Matchers.equalTo(book)))

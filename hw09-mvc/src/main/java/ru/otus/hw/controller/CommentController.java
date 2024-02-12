@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.CommentService;
 
@@ -16,8 +16,8 @@ public class CommentController {
 
     private final BookService bookService;
 
-    @GetMapping("/comment")
-    public String allCommentsForBook(Model model, @RequestParam(name = "bookId") long bookId) {
+    @GetMapping("/book/comment/{id}")
+    public String allCommentsForBook(@PathVariable(name = "id") long bookId, Model model) {
         var book = bookService.findById(bookId);
         var comments = commentService.findByBookId(bookId);
         model.addAttribute("book", book);
