@@ -14,7 +14,6 @@ import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.CommentService;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,7 +39,7 @@ class CommentControllerTest {
                 new AuthorDto(0, "author"),
                 new GenreDto(0, "genre"));
 
-        given(bookService.findById(1)).willReturn(Optional.of(book));
+        given(bookService.findById(1)).willReturn(book);
         given(commentService.findByBookId(1)).willReturn(List.of(
                 new CommentDto(1, "1", 1),
                 new CommentDto(2, "2", 1)));

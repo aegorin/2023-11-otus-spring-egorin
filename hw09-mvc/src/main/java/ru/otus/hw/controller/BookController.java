@@ -31,7 +31,7 @@ public class BookController {
 
     @GetMapping("/book/{id}")
     public String editBook(@PathVariable("id") long bookId, Model model) {
-        var book = bookService.findById(bookId).orElseThrow(NotFoundException::new);
+        var book = bookService.findById(bookId);
         model.addAttribute("book", book);
         model.addAttribute("genres", genreService.findAll());
         model.addAttribute("authors", authorService.findAll());

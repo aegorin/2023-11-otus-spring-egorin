@@ -18,7 +18,7 @@ public class CommentController {
 
     @GetMapping("/comment")
     public String allCommentsForBook(Model model, @RequestParam(name = "bookId") long bookId) {
-        var book = bookService.findById(bookId).orElseThrow(NotFoundException::new);
+        var book = bookService.findById(bookId);
         var comments = commentService.findByBookId(bookId);
         model.addAttribute("book", book);
         model.addAttribute("comments", comments);

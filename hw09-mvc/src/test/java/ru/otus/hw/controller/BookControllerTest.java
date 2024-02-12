@@ -15,7 +15,6 @@ import ru.otus.hw.services.GenreService;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.Matchers.not;
@@ -63,7 +62,7 @@ class BookControllerTest {
         BookDto book = new BookDto(111, "Title_of_book_111",
                 new AuthorDto(111, "author"),
                 new GenreDto(111, "genre"));
-        given(bookService.findById(111L)).willReturn(Optional.of(book));
+        given(bookService.findById(111L)).willReturn(book);
         given(authorService.findAll()).willReturn(List.of(
                 new AuthorDto(0, "0"),
                 new AuthorDto(1, "1")));
