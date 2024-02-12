@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.controller.NotFoundException;
 import ru.otus.hw.converters.BookConverter;
+import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -44,23 +46,23 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public BookDto create(String title, long authorId, long genreId) {
+    public BookDto create(BookCreateDto bookCreateDto) {
         var book = new Book();
-        book.setTitle(title);
-        book.setAuthor(authorById(authorId));
-        book.setGenre(genreById(genreId));
+        book.setTitle(bookCreateDto.getTitle());
+        book.setAuthor(authorById(bookCreateDto.getIdAuthor()));
+        book.setGenre(genreById(bookCreateDto.getIdGenre()));
         book = bookRepository.save(book);
         return bookConverter.toDto(book);
     }
 
     @Override
     @Transactional
-    public BookDto update(long id, String title, long authorId, long genreId) {
-        var book = bookRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(id)));
-        book.setTitle(title);
-        book.setAuthor(authorById(authorId));
-        book.setGenre(genreById(genreId));
+    public BookDto update(BookUpdateDto bookUpdateDto) {
+        var book = bookRepository.findById(bookUpdateDto.getId())
+                .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(bookUpdateDto.getId())));
+        book.setTitle(bookUpdateDto.getTitle());
+        book.setAuthor(authorById(bookUpdateDto.getIdAuthor()));
+        book.setGenre(genreById(bookUpdateDto.getIdGenre()));
         book = bookRepository.save(book);
         return bookConverter.toDto(book);
     }

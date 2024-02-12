@@ -7,7 +7,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.dto.AuthorDto;
+import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
@@ -71,9 +73,9 @@ class BookControllerTest {
         given(genreService.findAll()).willReturn(List.of(new GenreDto(0, "0")));
 
         mvc.perform(get("/book/111"))
-                .andExpect(view().name("book/form"))
+                .andExpect(view().name("book/form_edit_book"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("book", Matchers.is(book)))
+                .andExpect(model().attribute("book", Matchers.is(new BookUpdateDto(book.getId(), book.getTitle(), 111, 111))))
                 .andExpect(model().attribute("authors", Matchers.hasSize(2)))
                 .andExpect(model().attribute("genres", Matchers.hasSize(1)))
                 .andExpect(content().string(containsString("Редактирование книги")))
@@ -91,18 +93,18 @@ class BookControllerTest {
         mvc.perform(put("/book")
                 .param("id", "1")
                 .param("title", "test_updated_book")
-                .param("author.id", "2")
-                .param("genre.id", "3"));
-        verify(bookService, only()).update(1, "test_updated_book", 2, 3);
+                .param("idAuthor", "2")
+                .param("idGenre", "3"));
+        verify(bookService, only()).update(new BookUpdateDto(1, "test_updated_book", 2, 3));
     }
 
     @Test
     void shouldCreateBook() throws Exception {
         mvc.perform(post("/book")
                 .param("title", "test_new_create_book")
-                .param("author.id", "33")
-                .param("genre.id", "22"));
-        verify(bookService, only()).create("test_new_create_book", 33, 22);
+                .param("idAuthor", "33")
+                .param("idGenre", "22"));
+        verify(bookService, only()).create(new BookCreateDto("test_new_create_book", 33, 22));
     }
 
     @Test
@@ -113,7 +115,7 @@ class BookControllerTest {
         given(genreService.findAll()).willReturn(List.of(new GenreDto(0, "0")));
 
         mvc.perform(get("/book"))
-                .andExpect(view().name("book/form"))
+                .andExpect(view().name("book/form_new_book"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("authors", Matchers.hasSize(2)))
                 .andExpect(model().attribute("genres", Matchers.hasSize(1)))

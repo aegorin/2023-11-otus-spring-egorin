@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{ layout :: common_header(~{::title}) }">
-    <title th:if="${book.id &gt; 0}">Редактирование книги</title>
-    <title th:if="${book.id} eq 0">Добавление новой книги</title>
+    <title>Добавление новой книги</title>
 </head>
 <body>
 <div id="container">
     <div th:replace="~{ layout :: navigation }"/>
     <div id="content">
-        <h3 th:if="${book.id &gt; 0}">Редактирование книги</h3>
-        <h3 th:if="${book.id} eq 0">Добавление новой книги</h3>
-        <form th:method="${book.id &gt; 0} ? put : post" th:action="@{/book}" th:object="${book}" id="book_form">
-            <input type="hidden" th:field="*{id}" th:if="${book.id &gt; 0}"/>
-        </form>
+        <h3>Добавление новой книги</h3>
+        <form th:method="post" th:action="@{/book}" th:object="${book}" id="book_form"></form>
         <table style="width: 100%;">
             <tr>
                 <td style="width: 20px;">Наименование</td>
@@ -23,7 +19,7 @@
             <tr>
                 <td>Автор</td>
                 <td>
-                    <select th:field="${book.author.id}" form="book_form">
+                    <select th:field="${book.idAuthor}" form="book_form">
                         <option th:each="author : ${authors}"
                                 th:value="${author.id}"
                                 th:text="${author.fullName}">Автор</option>
@@ -33,7 +29,7 @@
             <tr>
                 <td>Жанр</td>
                 <td>
-                    <select th:field="${book.genre.id}" form="book_form">
+                    <select th:field="${book.idGenre}" form="book_form">
                         <option th:each="genre : ${genres}"
                                 th:value="${genre.id}"
                                 th:text="${genre.name}">Жанр</option>
@@ -44,10 +40,6 @@
                 <td colspan="3" style="text-align: right;">
                     <button type="submit" form="book_form" style="width: 90px;">Сохранить</button>
                     <a th:href="@{/}"><button type="button" style="width: 90px;">Отмена</button></a>
-
-                    <form th:if="${book.id &gt; 0}" th:method="delete" th:action="@{/book/delete/__*{id}__}" style="display: inline;" >
-                        <button type="submit" style="width: 90px;">Удалить</button>
-                    </form>
                 </td>
             </tr>
         </table>

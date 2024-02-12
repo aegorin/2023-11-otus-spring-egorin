@@ -1,15 +1,16 @@
 package ru.otus.hw.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookCreateDto;
+import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.GenreService;
@@ -34,10 +35,13 @@ public class BookController {
     @GetMapping("/book/{id}")
     public String editBook(@PathVariable("id") long bookId, Model model) {
         var book = bookService.findById(bookId);
-        model.addAttribute("book", book);
+        var updateDto = new BookUpdateDto(book.getId(), book.getTitle(),
+                book.getAuthor().getId(),
+                book.getGenre().getId());
+        model.addAttribute("book", updateDto);
         model.addAttribute("genres", genreService.findAll());
         model.addAttribute("authors", authorService.findAll());
-        return "book/form";
+        return "book/form_edit_book";
     }
 
     @DeleteMapping("/book/delete/{id}")
@@ -48,28 +52,21 @@ public class BookController {
 
     @GetMapping("/book")
     public String newBook(Model model) {
-        model.addAttribute("book", new BookDto());
+        model.addAttribute("book", new BookCreateDto());
         model.addAttribute("genres", genreService.findAll());
         model.addAttribute("authors", authorService.findAll());
-        return "book/form";
+        return "book/form_new_book";
     }
 
     @PostMapping(value = "/book")
-    public String saveNewBook(HttpServletRequest request) {
-        String bookTitle = request.getParameter("title");
-        long authorId = Long.parseLong(request.getParameter("author.id"));
-        long genreId = Long.parseLong(request.getParameter("genre.id"));
-        bookService.create(bookTitle, authorId, genreId);
+    public String saveNewBook(@ModelAttribute("book") BookCreateDto bookCreateDto) {
+        bookService.create(bookCreateDto);
         return "redirect:/";
     }
 
     @PutMapping(value = "/book")
-    public String updateBook(HttpServletRequest request) {
-        long bookId = Long.parseLong(request.getParameter("id"));
-        String bookTitle = request.getParameter("title");
-        long authorId = Long.parseLong(request.getParameter("author.id"));
-        long genreId = Long.parseLong(request.getParameter("genre.id"));
-        bookService.update(bookId, bookTitle, authorId, genreId);
+    public String updateBook(@ModelAttribute("book") BookUpdateDto bookUpdateDto) {
+        bookService.update(bookUpdateDto);
         return "redirect:/";
     }
 }
