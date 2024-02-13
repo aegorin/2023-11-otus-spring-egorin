@@ -21,6 +21,7 @@ import java.util.List;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -80,6 +81,13 @@ class BookControllerTest {
                 .andExpect(model().attribute("genres", Matchers.hasSize(1)))
                 .andExpect(content().string(containsString("Редактирование книги")))
                 .andExpect(content().string(containsString("Title_of_book_111")));
+    }
+
+    @Test
+    void should_response_404_when_book_not_exists() throws Exception {
+        doThrow(NotFoundException.class).when(bookService).findById(12345);
+        mvc.perform(get("/book/12345"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
