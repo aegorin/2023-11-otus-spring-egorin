@@ -30,6 +30,13 @@ body {
   text-transform:uppercase;
 }
 
+.error_message {
+  color: red;
+  font-size: 80%;
+  text-shadow: none;
+  margin-top: 4px;
+}
+
 /*** Table Styles **/
 .table-fill {
   background: white;

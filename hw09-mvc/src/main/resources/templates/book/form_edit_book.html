@@ -16,6 +16,9 @@
                 <td style="width: 20px;">Наименование</td>
                 <td>
                     <input type="text" th:field="${book.title}" style="width: 100%;" form="book_form" required/>
+                    <div th:if="${#fields.hasErrors('${book.title}')}"
+                         th:errors="*{book.title}"
+                         class="error_message"></div>
                 </td>
             </tr>
             <tr>

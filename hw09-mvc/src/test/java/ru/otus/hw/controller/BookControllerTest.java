@@ -99,12 +99,50 @@ class BookControllerTest {
     }
 
     @Test
+    void should_not_update_book_with_blank_title() throws Exception {
+        mvc.perform(put("/book")
+                .param("id", "1")
+                .param("title", "  ")
+                .param("idAuthor", "2")
+                .param("idGenre", "3"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void should_not_update_book_with_one_char_title() throws Exception {
+        mvc.perform(put("/book")
+                .param("id", "1")
+                .param("title", "F")
+                .param("idAuthor", "2")
+                .param("idGenre", "3"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void shouldCreateBook() throws Exception {
         mvc.perform(post("/book")
                 .param("title", "test_new_create_book")
                 .param("idAuthor", "33")
                 .param("idGenre", "22"));
         verify(bookService, only()).create(new BookCreateDto("test_new_create_book", 33, 22));
+    }
+
+    @Test
+    void should_not_create_book_with_blank_title() throws Exception {
+        mvc.perform(post("/book")
+                .param("title", " ")
+                .param("idAuthor", "33")
+                .param("idGenre", "22"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void should_not_create_book_with_one_char_title() throws Exception {
+        mvc.perform(post("/book")
+                .param("title", "r")
+                .param("idAuthor", "33")
+                .param("idGenre", "22"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
