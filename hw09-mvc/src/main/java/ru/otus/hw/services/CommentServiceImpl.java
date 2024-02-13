@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.controller.NotFoundException;
+import ru.otus.hw.dto.CommentCreateDto;
 import ru.otus.hw.dto.CommentUpdateDto;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.CommentRepository;
@@ -30,20 +31,22 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public CommentUpdateDto updateComment(long commentId, String commentText) {
+    public CommentUpdateDto updateComment(CommentUpdateDto commentUpdateDto) {
+        long commentId = commentUpdateDto.getId();
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Comment with id %d not found".formatted(commentId)));
-        comment.setText(commentText);
+        comment.setText(comment.getText());
         comment = commentRepository.save(comment);
         return new CommentUpdateDto(comment.getId(), comment.getText(), comment.getBook().getId());
     }
 
     @Transactional
     @Override
-    public CommentUpdateDto addComment(long bookId, String commentText) {
+    public CommentUpdateDto addComment(CommentCreateDto commentCreateDto) {
+        long bookId = commentCreateDto.getBookId();
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(bookId)));
-        Comment comment = new Comment(book, commentText);
+        Comment comment = new Comment(book, commentCreateDto.getText());
         comment = commentRepository.save(comment);
         return new CommentUpdateDto(comment.getId(), comment.getText(), comment.getBook().getId());
     }
