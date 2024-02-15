@@ -26,8 +26,8 @@ public class BookMapperImpl implements BookMapper {
     public Book toModel(BookCreateDto bookCreateDto) {
         var book = new Book();
         book.setTitle(bookCreateDto.getTitle());
-        book.setAuthor(authorById(bookCreateDto.getIdAuthor()));
-        book.setGenre(genreById(bookCreateDto.getIdGenre()));
+        book.setAuthor(authorById(bookCreateDto.getAuthorId()));
+        book.setGenre(genreById(bookCreateDto.getGenreId()));
         return book;
     }
 
@@ -36,8 +36,8 @@ public class BookMapperImpl implements BookMapper {
         var book = new Book();
         book.setId(bookUpdateDto.getId());
         book.setTitle(bookUpdateDto.getTitle());
-        book.setAuthor(authorById(bookUpdateDto.getIdAuthor()));
-        book.setGenre(genreById(bookUpdateDto.getIdGenre()));
+        book.setAuthor(authorById(bookUpdateDto.getAuthorId()));
+        book.setGenre(genreById(bookUpdateDto.getGenreId()));
         return book;
     }
 

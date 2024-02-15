@@ -24,7 +24,7 @@
             <tr>
                 <td>Автор</td>
                 <td>
-                    <select th:field="${book.idAuthor}" form="book_form">
+                    <select th:field="${book.authorId}" form="book_form">
                         <option th:each="author : ${authors}"
                                 th:value="${author.id}"
                                 th:text="${author.fullName}">Автор</option>
@@ -34,7 +34,7 @@
             <tr>
                 <td>Жанр</td>
                 <td>
-                    <select th:field="${book.idGenre}" form="book_form">
+                    <select th:field="${book.genreId}" form="book_form">
                         <option th:each="genre : ${genres}"
                                 th:value="${genre.id}"
                                 th:text="${genre.name}">Жанр</option>
