@@ -25,7 +25,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentUpdateDto> findByBookId(long bookId) {
         return commentRepository.findByBookId(bookId).stream()
-                .map(c -> new CommentUpdateDto(c.getId(), c.getText(), bookId))
+                .map(c -> new CommentUpdateDto(c.getId(), c.getText()))
                 .collect(Collectors.toList());
     }
 
@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundException("Comment with id %d not found".formatted(commentId)));
         comment.setText(comment.getText());
         comment = commentRepository.save(comment);
-        return new CommentUpdateDto(comment.getId(), comment.getText(), comment.getBook().getId());
+        return new CommentUpdateDto(comment.getId(), comment.getText());
     }
 
     @Transactional
@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(bookId)));
         Comment comment = new Comment(book, commentCreateDto.getText());
         comment = commentRepository.save(comment);
-        return new CommentUpdateDto(comment.getId(), comment.getText(), comment.getBook().getId());
+        return new CommentUpdateDto(comment.getId(), comment.getText());
     }
 
     @Transactional

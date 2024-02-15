@@ -9,6 +9,4 @@ public class CommentUpdateDto {
     private long id;
 
     private String text;
-
-    private long bookId;
 }
