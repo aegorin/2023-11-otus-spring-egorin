@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common_header(title)">
+    <meta charset="utf-8" />
+    <title th:replace="${title}">Default title</title>
+    <meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; width=device-width;">
+    <link rel="stylesheet" href="/stylesheet.css">
+</head>
+<body>
+<div th:fragment="navigation" id="navigation">
+    <ul style="padding: 0;">
+        <li><a href="/">Книги</a></li>
+        <li><a href="authors">Авторы</a></li>
+        <li><a href="genres">Жанры</a></li>
+    </ul>
+</div>
+<p>Body content</p>
+</body>
+</html>
