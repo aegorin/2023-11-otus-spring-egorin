@@ -9,5 +9,5 @@ public class CommentCreateDto {
 
     private String text;
 
-    private long bookId;
+    private Long bookId;
 }

@@ -39,8 +39,8 @@ class CommentControllerTest {
 
         given(bookService.findById(1)).willReturn(book);
         given(commentService.findByBookId(1)).willReturn(List.of(
-                new CommentUpdateDto(1, "1"),
-                new CommentUpdateDto(2, "2")));
+                new CommentUpdateDto(1L, "1"),
+                new CommentUpdateDto(2L, "2")));
 
         mvc.perform(get("/book/comment/1"))
                 .andExpect(view().name("comment/list"))

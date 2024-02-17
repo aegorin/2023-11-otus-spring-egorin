@@ -76,7 +76,7 @@ class BookControllerTest {
         mvc.perform(get("/book/111"))
                 .andExpect(view().name("book/form_edit_book"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("book", Matchers.is(new BookUpdateDto(book.getId(), book.getTitle(), 7, 9))))
+                .andExpect(model().attribute("book", Matchers.is(new BookUpdateDto(book.getId(), book.getTitle(), 7L, 9L))))
                 .andExpect(model().attribute("authors", Matchers.hasSize(2)))
                 .andExpect(model().attribute("genres", Matchers.hasSize(1)))
                 .andExpect(content().string(containsString("Редактирование книги")))
@@ -103,7 +103,7 @@ class BookControllerTest {
                 .param("title", "test_updated_book")
                 .param("authorId", "2")
                 .param("genreId", "3"));
-        verify(bookService, only()).update(new BookUpdateDto(1, "test_updated_book", 2, 3));
+        verify(bookService, only()).update(new BookUpdateDto(1L, "test_updated_book", 2L, 3L));
     }
 
     @Test
@@ -132,7 +132,7 @@ class BookControllerTest {
                 .param("title", "test_new_create_book")
                 .param("authorId", "33")
                 .param("genreId", "22"));
-        verify(bookService, only()).create(new BookCreateDto("test_new_create_book", 33, 22));
+        verify(bookService, only()).create(new BookCreateDto("test_new_create_book", 33L, 22L));
     }
 
     @Test

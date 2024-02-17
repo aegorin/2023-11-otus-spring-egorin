@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CommentUpdateDto {
-    private long id;
+    private Long id;
 
     private String text;
 }

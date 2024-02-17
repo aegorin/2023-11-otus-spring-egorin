@@ -15,7 +15,7 @@ public class BookCreateDto {
     @Size(min = 2, max = 256, message = "Наименование книги должно содержать от 2 до 256 символов")
     private String title;
 
-    private long authorId;
+    private Long authorId;
 
-    private long genreId;
+    private Long genreId;
 }
