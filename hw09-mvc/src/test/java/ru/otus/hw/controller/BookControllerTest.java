@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.validation.BindingResult;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
@@ -29,7 +30,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -98,7 +101,7 @@ class BookControllerTest {
 
     @Test
     void shouldUpdateBook() throws Exception {
-        mvc.perform(put("/book")
+        mvc.perform(put("/book/1")
                 .param("id", "1")
                 .param("title", "test_updated_book")
                 .param("authorId", "2")
@@ -108,40 +111,48 @@ class BookControllerTest {
 
     @Test
     void should_not_update_book_with_blank_title() throws Exception {
-        mvc.perform(put("/book")
-                .param("id", "1")
+        mvc.perform(put("/book/17")
+                .param("id", "17")
                 .param("title", "  ")
                 .param("authorId", "2")
                 .param("genreId", "3"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/book/17"))
+                .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
     @Test
     void should_not_update_book_with_one_char_title() throws Exception {
-        mvc.perform(put("/book")
+        mvc.perform(put("/book/1")
                 .param("id", "1")
                 .param("title", "F")
                 .param("authorId", "2")
                 .param("genreId", "3"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/book/1"))
+                .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
     @Test
     void should_not_update_book_when_author_empty() throws Exception {
-        mvc.perform(put("/book")
+        mvc.perform(put("/book/1")
                 .param("id", "1")
                 .param("title", "Book without author")
                 .param("genreId", "23"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/book/1"))
+                .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
     @Test
     void should_not_update_book_when_genre_empty() throws Exception {
-        mvc.perform(put("/book")
+        mvc.perform(put("/book/1")
                 .param("id", "1")
                 .param("title", "Book without genre")
                 .param("authorId", "13"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/book/1"))
+                .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
     @Test
@@ -159,7 +170,9 @@ class BookControllerTest {
                 .param("title", " ")
                 .param("authorId", "33")
                 .param("genreId", "22"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/book"))
+                .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
     @Test
@@ -168,7 +181,9 @@ class BookControllerTest {
                 .param("title", "r")
                 .param("authorId", "33")
                 .param("genreId", "22"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/book"))
+                .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
     @Test
@@ -176,7 +191,9 @@ class BookControllerTest {
         mvc.perform(post("/book")
                 .param("title", "Test book without author")
                 .param("genreId", "22"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/book"))
+                .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
     @Test
@@ -184,7 +201,9 @@ class BookControllerTest {
         mvc.perform(post("/book")
                 .param("title", "Test book without genre")
                 .param("authorId", "333"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/book"))
+                .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
     @Test

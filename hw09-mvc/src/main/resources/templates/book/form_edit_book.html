@@ -8,7 +8,7 @@
     <div th:replace="~{ layout :: navigation }"/>
     <div id="content">
         <h3>Редактирование книги</h3>
-        <form th:method="put" th:action="@{/book}" th:object="${book}" id="book_form">
+        <form th:method="put" th:action="@{/book/__*{id}__}" th:object="${book}" id="book_form">
             <input type="hidden" th:field="*{id}"/>
         </form>
         <table style="width: 100%;">
