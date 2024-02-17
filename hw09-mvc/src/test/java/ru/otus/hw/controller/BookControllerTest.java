@@ -127,6 +127,24 @@ class BookControllerTest {
     }
 
     @Test
+    void should_not_update_book_when_author_empty() throws Exception {
+        mvc.perform(put("/book")
+                .param("id", "1")
+                .param("title", "Book without author")
+                .param("genreId", "23"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void should_not_update_book_when_genre_empty() throws Exception {
+        mvc.perform(put("/book")
+                .param("id", "1")
+                .param("title", "Book without genre")
+                .param("authorId", "13"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void shouldCreateBook() throws Exception {
         mvc.perform(post("/book")
                 .param("title", "test_new_create_book")
@@ -150,6 +168,22 @@ class BookControllerTest {
                 .param("title", "r")
                 .param("authorId", "33")
                 .param("genreId", "22"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void should_not_create_book_when_empty_author() throws Exception {
+        mvc.perform(post("/book")
+                .param("title", "Test book without author")
+                .param("genreId", "22"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void should_not_create_book_when_empty_genre() throws Exception {
+        mvc.perform(post("/book")
+                .param("title", "Test book without genre")
+                .param("authorId", "333"))
                 .andExpect(status().isBadRequest());
     }
 
