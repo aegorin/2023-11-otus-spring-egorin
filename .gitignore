@@ -2,3 +2,7 @@
 *.iml
 *.swp
 **/target/**
+
+hw10-rest-ui-react/node/
+hw10-rest-ui-react/node_modules/
+
