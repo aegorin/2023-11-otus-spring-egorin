@@ -2,7 +2,6 @@ package ru.otus.hw.convertors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.otus.hw.controller.NotFoundException;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
@@ -11,33 +10,27 @@ import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
-import ru.otus.hw.repositories.AuthorRepository;
-import ru.otus.hw.repositories.GenreRepository;
 
 @Component
 @RequiredArgsConstructor
 public class BookMapperImpl implements BookMapper {
 
-    private final AuthorRepository authorRepository;
-
-    private final GenreRepository genreRepository;
-
     @Override
-    public Book toModel(BookCreateDto bookCreateDto) {
+    public Book toModel(BookCreateDto bookCreateDto, Author author, Genre genre) {
         var book = new Book();
         book.setTitle(bookCreateDto.getTitle());
-        book.setAuthor(authorById(bookCreateDto.getAuthorId()));
-        book.setGenre(genreById(bookCreateDto.getGenreId()));
+        book.setAuthor(author);
+        book.setGenre(genre);
         return book;
     }
 
     @Override
-    public Book toModel(BookUpdateDto bookUpdateDto) {
+    public Book toModel(BookUpdateDto bookUpdateDto, Author author, Genre genre) {
         var book = new Book();
         book.setId(bookUpdateDto.getId());
         book.setTitle(bookUpdateDto.getTitle());
-        book.setAuthor(authorById(bookUpdateDto.getAuthorId()));
-        book.setGenre(genreById(bookUpdateDto.getGenreId()));
+        book.setAuthor(author);
+        book.setGenre(genre);
         return book;
     }
 
@@ -55,15 +48,5 @@ public class BookMapperImpl implements BookMapper {
         return new BookUpdateDto(book.getId(), book.getTitle(),
                 book.getAuthor().getId(),
                 book.getGenre().getId());
-    }
-
-    private Author authorById(Long authorId) {
-        return authorRepository.findById(authorId)
-                .orElseThrow(() -> new NotFoundException("authorId", "Author with id %d not found".formatted(authorId)));
-    }
-
-    private Genre genreById(Long genreId) {
-        return genreRepository.findById(genreId)
-                .orElseThrow(() -> new NotFoundException("genreId", "Genre with id %d not found".formatted(genreId)));
     }
 }

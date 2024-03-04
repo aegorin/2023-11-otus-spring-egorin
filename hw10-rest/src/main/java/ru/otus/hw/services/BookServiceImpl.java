@@ -18,6 +18,10 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
 
+    private final AuthorService authorService;
+
+    private final GenreService genreService;
+
     private final BookMapper bookMapper;
 
     @Override
@@ -39,7 +43,9 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public BookUpdateDto create(BookCreateDto bookCreateDto) {
-        var book = bookMapper.toModel(bookCreateDto);
+        var author = authorService.getById(bookCreateDto.getAuthorId());
+        var genre = genreService.getById(bookCreateDto.getGenreId());
+        var book = bookMapper.toModel(bookCreateDto, author, genre);
         book = bookRepository.save(book);
         return bookMapper.toUpdateDto(book);
     }
@@ -50,7 +56,9 @@ public class BookServiceImpl implements BookService {
         if (!bookRepository.existsById(bookUpdateDto.getId())) {
             throw new NotFoundException("bookId", "Book with id %d not found".formatted(bookUpdateDto.getId()));
         }
-        var book = bookMapper.toModel(bookUpdateDto);
+        var author = authorService.getById(bookUpdateDto.getAuthorId());
+        var genre = genreService.getById(bookUpdateDto.getGenreId());
+        var book = bookMapper.toModel(bookUpdateDto, author, genre);
         bookRepository.save(book);
     }
 
