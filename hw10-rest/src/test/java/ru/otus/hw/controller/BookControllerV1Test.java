@@ -85,6 +85,14 @@ class BookControllerV1Test {
     }
 
     @Test
+    void should_response_500_when_bookId_not_digits() throws Exception {
+        mvc.perform(get("/api/v1/book/a-b-c"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.error", not(Matchers.empty())));
+    }
+
+    @Test
     void shouldDeleteBook() throws Exception {
         mvc.perform(delete("/api/v1/book/777"))
                 .andExpect(status().isNoContent());
