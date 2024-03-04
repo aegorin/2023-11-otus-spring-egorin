@@ -1,0 +1,31 @@
+.books-table {
+  width: 100%;
+  border: 1px solid #f0f0f0;
+  border-collapse: collapse;
+  margin-top: 0.28em;
+}
+
+.books-table td {
+  border: 1px solid #f0f0f0;
+  padding: 0.5rem;
+}
+
+.book-controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+img.edit {
+  background: #FFFFFF url('../../images/pen.png') no-repeat center;
+  width: 20px;
+  height: 20px;
+  border: none;
+}
+
+img.comment {
+  background: #FFFFFF url('../../images/comment.png') no-repeat center;
+  width: 20px;
+  height: 20px;
+  border: none;
+}

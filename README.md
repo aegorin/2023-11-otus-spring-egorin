@@ -15,4 +15,6 @@
 Задание №7 в папке [hw07-data-jpa](./hw07-data-jpa) ветка [hw07](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw07).\
 Задание №8 в папке [hw08-mongo](./hw08-mongo) ветка [hw08](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw08).
 
-Задание №9 в папке [hw09-mvc](./hw09-mvc) ветка [hw09](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw09/hw09-mvc).
+Задание №9 в папке [hw09-mvc](./hw09-mvc) ветка [hw09](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw09/hw09-mvc).\
+Задание №10 в папке [hw10-rest](./hw10-rest) ветка [hw10](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw10/hw10-rest).
+
