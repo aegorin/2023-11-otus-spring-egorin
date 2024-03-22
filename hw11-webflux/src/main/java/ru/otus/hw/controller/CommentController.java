@@ -15,34 +15,43 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.otus.hw.dto.CommentCreateDto;
 import ru.otus.hw.dto.CommentUpdateDto;
-import ru.otus.hw.services.CommentService;
+import ru.otus.hw.models.Comment;
+import ru.otus.hw.repositories.CommentRepository;
 
 @RequiredArgsConstructor
 @RestController
 public class CommentController {
 
-    private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
     @GetMapping("/api/v1/book/{bookId}/comment")
     public Flux<CommentUpdateDto> allCommentsForBook(@PathVariable Long bookId) {
-        return commentService.findByBookId(bookId);
+        return commentRepository.findByBookId(bookId)
+                .map(comment -> new CommentUpdateDto(comment.getId(), comment.getText()));
     }
 
     @PostMapping("/api/v1/comment")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<CommentUpdateDto> createNewComment(@Valid @RequestBody CommentCreateDto commentCreateDto) {
-        return commentService.addComment(commentCreateDto);
+        return commentRepository.save(new Comment(commentCreateDto.getText(), commentCreateDto.getBookId()))
+                .map(c -> new CommentUpdateDto(c.getId(), c.getText()));
     }
 
     @PutMapping("/api/v1/comment/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> updateCommentById(@Valid @RequestBody CommentUpdateDto commentUpdateDto) {
-        return commentService.updateComment(commentUpdateDto);
+        long commentId = commentUpdateDto.getId();
+        return commentRepository.findById(commentId)
+                .flatMap(c -> {
+                    c.setText(commentUpdateDto.getText());
+                    return commentRepository.save(c);
+                })
+                .flatMap(comment -> Mono.empty());
     }
 
     @DeleteMapping("/api/v1/comment/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> deleteCommentById(@PathVariable Long commentId) {
-        return commentService.deleteCommentById(commentId);
+        return commentRepository.deleteById(commentId);
     }
 }

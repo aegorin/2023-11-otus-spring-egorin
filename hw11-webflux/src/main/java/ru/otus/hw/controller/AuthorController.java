@@ -5,16 +5,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import ru.otus.hw.models.Author;
-import ru.otus.hw.services.AuthorService;
+import ru.otus.hw.repositories.AuthorRepository;
 
 @RequiredArgsConstructor
 @RestController
 public class AuthorController {
 
-    private final AuthorService authorService;
+    private final AuthorRepository authorRepository;
 
     @GetMapping("/api/v1/author")
     public Flux<Author> allAuthors() {
-        return authorService.findAll();
+        return authorRepository.findAll();
     }
 }
