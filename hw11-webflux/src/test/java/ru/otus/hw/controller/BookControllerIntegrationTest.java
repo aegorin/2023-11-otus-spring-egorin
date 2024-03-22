@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -139,12 +138,12 @@ class BookControllerIntegrationTest {
     }
 
     @Test
-    void should_response_500_when_bookId_not_digits() {
+    void should_response_404_when_bookId_not_digits() {
         webTestClient
                 .get().uri("/api/v1/book/{bookId}", "not-valid-book-id")
                 .accept(MediaType.APPLICATION_NDJSON)
                 .exchange()
-                .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+                .expectStatus().isNotFound()
                 .expectBody()
                 .jsonPath("$.errors").isNotEmpty();
     }
