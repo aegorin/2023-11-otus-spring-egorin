@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 import ru.otus.hw.dto.CommentCreateDto;
 import ru.otus.hw.dto.CommentUpdateDto;
 import ru.otus.hw.models.Comment;
+import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
 
 @RequiredArgsConstructor
@@ -23,6 +24,8 @@ import ru.otus.hw.repositories.CommentRepository;
 public class CommentController {
 
     private final CommentRepository commentRepository;
+
+    private final BookRepository bookRepository;
 
     @GetMapping("/api/v1/book/{bookId}/comment")
     public Flux<CommentUpdateDto> allCommentsForBook(@PathVariable Long bookId) {
@@ -33,7 +36,16 @@ public class CommentController {
     @PostMapping("/api/v1/comment")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<CommentUpdateDto> createNewComment(@Valid @RequestBody CommentCreateDto commentCreateDto) {
-        return commentRepository.save(new Comment(commentCreateDto.getText(), commentCreateDto.getBookId()))
+        Long bookId = commentCreateDto.getBookId();
+        return bookRepository.existsById(bookId)
+                .map(b -> {
+                    if (b) {
+                        return new Comment(commentCreateDto.getText(), bookId);
+                    }
+                    throw new NotFoundException("bookId", "Book with id %d not found".formatted(bookId));
+                })
+                .onErrorStop()
+                .flatMap(commentRepository::save)
                 .map(c -> new CommentUpdateDto(c.getId(), c.getText()));
     }
 
