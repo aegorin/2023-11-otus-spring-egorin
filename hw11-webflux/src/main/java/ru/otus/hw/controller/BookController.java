@@ -17,13 +17,19 @@ import ru.otus.hw.convertors.BookMapper;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookUpdateDto;
+import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
+import ru.otus.hw.repositories.GenreRepository;
 
 @RequiredArgsConstructor
 @RestController
 public class BookController {
 
     private final BookRepository bookRepository;
+
+    private final GenreRepository genreRepository;
+
+    private final AuthorRepository authorRepository;
 
     private final BookMapper bookMapper;
 
@@ -44,7 +50,19 @@ public class BookController {
     @PostMapping("/api/v1/book")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<BookUpdateDto> createNewBook(@Valid @RequestBody BookCreateDto bookCreateDto) {
-        return Mono.just(bookMapper.toModel(bookCreateDto))
+        long genreId = bookCreateDto.getGenreId();
+        long authorId = bookCreateDto.getAuthorId();
+        return Mono.zip(genreRepository.existsById(genreId), authorRepository.existsById(authorId))
+                .map(tuple -> {
+                    if (!tuple.getT1()) {
+                        throw new NotFoundException("genreId", "Genre with id %d not found".formatted(genreId));
+                    }
+                    if (!tuple.getT2()) {
+                        throw new NotFoundException("authorId", "Author with id %d not found".formatted(authorId));
+                    }
+                    return bookMapper.toModel(bookCreateDto);
+                })
+                .onErrorStop()
                 .flatMap(bookRepository::save)
                 .map(bookMapper::toUpdateDto);
     }
