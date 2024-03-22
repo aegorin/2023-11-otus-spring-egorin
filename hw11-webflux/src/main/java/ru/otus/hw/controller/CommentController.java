@@ -51,14 +51,16 @@ public class CommentController {
 
     @PutMapping("/api/v1/comment/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> updateCommentById(@Valid @RequestBody CommentUpdateDto commentUpdateDto) {
+    public Mono<CommentUpdateDto> updateCommentById(@Valid @RequestBody CommentUpdateDto commentUpdateDto) {
         long commentId = commentUpdateDto.getId();
         return commentRepository.findById(commentId)
                 .flatMap(c -> {
                     c.setText(commentUpdateDto.getText());
                     return commentRepository.save(c);
                 })
-                .flatMap(comment -> Mono.empty());
+                .map(c -> new CommentUpdateDto(c.getId(), c.getText()))
+                .switchIfEmpty(Mono.error(
+                        new NotFoundException("commentId", "Comment with id %d not found".formatted(commentId))));
     }
 
     @DeleteMapping("/api/v1/comment/{commentId}")
