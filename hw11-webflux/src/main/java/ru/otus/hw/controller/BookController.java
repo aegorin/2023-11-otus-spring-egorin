@@ -70,7 +70,25 @@ public class BookController {
     @PutMapping("/api/v1/book/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> updateBook(@Valid @RequestBody BookUpdateDto bookUpdateDto) {
-        return Mono.just(bookMapper.toModel(bookUpdateDto))
+        long bookId = bookUpdateDto.getId();
+        long genreId = bookUpdateDto.getGenreId();
+        long authorId = bookUpdateDto.getAuthorId();
+        return Mono.zip(bookRepository.existsById(bookId),
+                        genreRepository.existsById(genreId),
+                        authorRepository.existsById(authorId))
+                .map(tuple -> {
+                    if (!tuple.getT1()) {
+                        throw new NotFoundException("bookId", "Book with id %d not found".formatted(bookId));
+                    }
+                    if (!tuple.getT2()) {
+                        throw new NotFoundException("genreId", "Genre with id %d not found".formatted(genreId));
+                    }
+                    if (!tuple.getT3()) {
+                        throw new NotFoundException("authorId", "Author with id %d not found".formatted(authorId));
+                    }
+                    return bookMapper.toModel(bookUpdateDto);
+                })
+                .onErrorStop()
                 .flatMap(bookRepository::save)
                 .flatMap(b -> Mono.empty());
     }

@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 import ru.otus.hw.convertors.BookMapper;
 import ru.otus.hw.convertors.BookMapperImpl;
 import ru.otus.hw.dto.BookCreateDto;
+import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
@@ -91,6 +92,88 @@ class BookControllerTest {
                 .expectStatus().isNotFound();
         Mockito.verify(genreRepository, Mockito.atMostOnce()).existsById(bookDto.getGenreId());
         Mockito.verify(authorRepository, Mockito.atMostOnce()).existsById(bookDto.getAuthorId());
+        Mockito.verify(bookRepository, Mockito.never()).save(Mockito.any(Book.class));
+    }
+
+    @Test
+    void should_update_book_when_correct_values() {
+        var bookDto = new BookUpdateDto(1L, "Book title", 2L, 3L);
+
+        Mockito.when(genreRepository.existsById(bookDto.getGenreId())).thenReturn(Mono.just(true));
+        Mockito.when(authorRepository.existsById(bookDto.getAuthorId())).thenReturn(Mono.just(true));
+        Mockito.when(bookRepository.existsById(bookDto.getId())).thenReturn(Mono.just(true));
+        Mockito.when(bookRepository.save(Mockito.any(Book.class))).thenReturn(Mono.just(
+                new Book(bookDto.getId(), bookDto.getTitle(), bookDto.getAuthorId(), bookDto.getGenreId())));
+
+        webClient.put()
+                .uri("/api/v1/book/{bookId}", bookDto.getId())
+                .body(BodyInserters.fromValue(bookDto))
+                .exchange()
+                .expectStatus().isNoContent();
+
+        Mockito.verify(genreRepository, Mockito.only()).existsById(bookDto.getGenreId());
+        Mockito.verify(authorRepository, Mockito.only()).existsById(bookDto.getAuthorId());
+        Mockito.verify(bookRepository, Mockito.atLeastOnce()).existsById(bookDto.getId());
+        Mockito.verify(bookRepository, Mockito.atLeastOnce()).save(Mockito.any(Book.class));
+    }
+
+    @Test
+    void should_not_update_book_when_book_absent() {
+        var bookDto = new BookUpdateDto(111L, "Book absent", 2L, 3L);
+
+        Mockito.when(genreRepository.existsById(bookDto.getGenreId())).thenReturn(Mono.just(true));
+        Mockito.when(authorRepository.existsById(bookDto.getAuthorId())).thenReturn(Mono.just(true));
+        Mockito.when(bookRepository.existsById(bookDto.getId())).thenReturn(Mono.just(false));
+
+        webClient.put()
+                .uri("/api/v1/book/{bookId}", bookDto.getId())
+                .body(BodyInserters.fromValue(bookDto))
+                .exchange()
+                .expectStatus().isNotFound();
+
+        Mockito.verify(genreRepository, Mockito.only()).existsById(bookDto.getGenreId());
+        Mockito.verify(authorRepository, Mockito.only()).existsById(bookDto.getAuthorId());
+        Mockito.verify(bookRepository, Mockito.only()).existsById(bookDto.getId());
+        Mockito.verify(bookRepository, Mockito.never()).save(Mockito.any(Book.class));
+    }
+
+    @Test
+    void should_not_update_book_when_genre_absent() {
+        var bookDto = new BookUpdateDto(1L, "Book, genre absent", 2L, 333L);
+
+        Mockito.when(genreRepository.existsById(bookDto.getGenreId())).thenReturn(Mono.just(false));
+        Mockito.when(authorRepository.existsById(bookDto.getAuthorId())).thenReturn(Mono.just(true));
+        Mockito.when(bookRepository.existsById(bookDto.getId())).thenReturn(Mono.just(true));
+
+        webClient.put()
+                .uri("/api/v1/book/{bookId}", bookDto.getId())
+                .body(BodyInserters.fromValue(bookDto))
+                .exchange()
+                .expectStatus().isNotFound();
+
+        Mockito.verify(genreRepository, Mockito.only()).existsById(bookDto.getGenreId());
+        Mockito.verify(authorRepository, Mockito.only()).existsById(bookDto.getAuthorId());
+        Mockito.verify(bookRepository, Mockito.only()).existsById(bookDto.getId());
+        Mockito.verify(bookRepository, Mockito.never()).save(Mockito.any(Book.class));
+    }
+
+    @Test
+    void should_not_update_book_when_author_absent() {
+        var bookDto = new BookUpdateDto(1L, "Book, author absent", 222L, 3L);
+
+        Mockito.when(genreRepository.existsById(bookDto.getGenreId())).thenReturn(Mono.just(true));
+        Mockito.when(authorRepository.existsById(bookDto.getAuthorId())).thenReturn(Mono.just(false));
+        Mockito.when(bookRepository.existsById(bookDto.getId())).thenReturn(Mono.just(true));
+
+        webClient.put()
+                .uri("/api/v1/book/{bookId}", bookDto.getId())
+                .body(BodyInserters.fromValue(bookDto))
+                .exchange()
+                .expectStatus().isNotFound();
+
+        Mockito.verify(genreRepository, Mockito.only()).existsById(bookDto.getGenreId());
+        Mockito.verify(authorRepository, Mockito.only()).existsById(bookDto.getAuthorId());
+        Mockito.verify(bookRepository, Mockito.only()).existsById(bookDto.getId());
         Mockito.verify(bookRepository, Mockito.never()).save(Mockito.any(Book.class));
     }
 }
