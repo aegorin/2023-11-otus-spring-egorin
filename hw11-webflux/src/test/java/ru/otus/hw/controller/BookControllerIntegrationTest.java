@@ -146,7 +146,7 @@ class BookControllerIntegrationTest {
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
                 .expectBody()
-                .jsonPath("$.error").isNotEmpty();
+                .jsonPath("$.errors").isNotEmpty();
     }
 
     @Test

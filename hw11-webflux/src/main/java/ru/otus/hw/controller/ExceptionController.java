@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
-import reactor.core.publisher.Mono;
 import ru.otus.hw.dto.ErrorFieldMessage;
 import ru.otus.hw.dto.ErrorsList;
 
 import java.util.Collections;
-import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionController {
@@ -22,26 +20,26 @@ public class ExceptionController {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Mono<ErrorsList> notFound(NotFoundException exception) {
+    public ErrorsList notFound(NotFoundException exception) {
         var errors = Collections.singletonList(new ErrorFieldMessage(exception.getFieldName(), exception.getMessage()));
-        return Mono.just(new ErrorsList(errors));
+        return new ErrorsList(errors);
     }
 
     @ExceptionHandler(WebExchangeBindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Mono<ErrorsList> onMethodArgumentNotValidException(WebExchangeBindException error) {
+    public ErrorsList onMethodArgumentNotValidException(WebExchangeBindException error) {
         var errors = error.getBindingResult().getFieldErrors()
                 .stream()
                 .map(e -> new ErrorFieldMessage(e.getField(), e.getDefaultMessage()))
                 .toList();
-        return Mono.just(new ErrorsList(errors));
+        return new ErrorsList(errors);
     }
 
     @ExceptionHandler(Exception.class)
-    public Mono<ResponseEntity<Object>> onAnyException(Exception error) {
+    public ResponseEntity<ErrorsList> onAnyException(Exception error) {
         LOGGER.error(error.getMessage(), error);
-        ResponseEntity<Object> response = ResponseEntity.internalServerError()
-                .body(Map.of("error", error.getMessage()));
-        return Mono.just(response);
+        var errorMessage = new ErrorFieldMessage("error", error.getMessage());
+        return ResponseEntity.internalServerError()
+                .body(new ErrorsList(Collections.singletonList(errorMessage)));
     }
 }
