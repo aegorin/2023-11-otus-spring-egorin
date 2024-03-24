@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+
+  r2dbc:
+    url: r2dbc:h2:mem:///book_catalogue
+    username: sa
+    password: 1
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog.yml
+    contexts: production

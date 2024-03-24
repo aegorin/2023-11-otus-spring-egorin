@@ -1,0 +1,8 @@
+spring:
+  r2dbc:
+    url: r2dbc:h2:mem:///book_catalogue_test
+    username: sa
+    password: 1
+  liquibase:
+    change-log: classpath:db/changelog/changelog.yml
+    contexts: test
