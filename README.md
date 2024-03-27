@@ -17,5 +17,5 @@
 
 Задание №9 в папке [hw09-mvc](./hw09-mvc) ветка [hw09](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw09/hw09-mvc).\
 Задание №10 в папке [hw10-rest](./hw10-rest) ветка [hw10](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw10/hw10-rest).\
-Задание №11 в папке [hw11-webflux](./hw11-webflux) ветка [hw11](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw11/hw11-webflux).
-
+Задание №11 в папке [hw11-webflux](./hw11-webflux) ветка [hw11](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw11/hw11-webflux).\
+Задание №12 в папке [hw12-auth](./hw12-auth) ветка [hw12](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw12/hw12-auth).

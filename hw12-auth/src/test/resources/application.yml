@@ -1,0 +1,12 @@
+book-application:
+  security:
+    validTokenRememberMe: 86400
+    persistentTokenKey: "c5OzD11La1bKaLFA#DMBe28Kc2xK0q#z"
+    nameCookieRememberMe: "0aB1#0c#2B#B0B#C1C1#2#a#2BC1211#"
+
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:16.2:///book_database?TC_TMPFS=/testtmpfs:rw
+  liquibase:
+    change-log: classpath:db/changelog/changelog.yml
+    contexts: test
