@@ -6,13 +6,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.otus.hw.repositories.LoginUserRepository;
+import ru.otus.hw.repositories.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceJpa implements UserDetailsService {
 
-    private final LoginUserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

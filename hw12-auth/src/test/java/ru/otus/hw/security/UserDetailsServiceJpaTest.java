@@ -10,8 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import ru.otus.hw.models.LoginUser;
-import ru.otus.hw.repositories.LoginUserRepository;
+import ru.otus.hw.models.User;
+import ru.otus.hw.repositories.UserRepository;
 
 import java.util.Optional;
 
@@ -24,7 +24,7 @@ class UserDetailsServiceJpaTest {
     private UserDetailsService userDetailsService;
 
     @MockBean
-    private LoginUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Test
     void should_throw_exception_when_user_absent() {
@@ -34,11 +34,11 @@ class UserDetailsServiceJpaTest {
     @Test
     void should_load_user_by_login() {
         var username = "user";
-        var resultLoginUser = new LoginUser();
-        resultLoginUser.setLogin(username);
-        resultLoginUser.setPassword("pwd");
+        var user = new User();
+        user.setLogin(username);
+        user.setPassword("pwd");
 
-        Mockito.when(userRepository.findByLogin(username)).thenReturn(Optional.of(resultLoginUser));
+        Mockito.when(userRepository.findByLogin(username)).thenReturn(Optional.of(user));
 
         var details = userDetailsService.loadUserByUsername(username);
         Assertions.assertNotNull(details);
