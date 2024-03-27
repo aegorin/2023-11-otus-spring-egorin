@@ -36,6 +36,7 @@ class JpaGenreRepositoryTest {
     void loadAllGenre() {
         var genres = IntStream.range(1, 4).mapToObj(i -> new Genre(i, "Genre_" + i)).toList();
         assertThat(genreRepository.findAll())
+                .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyElementsOf(genres);
     }
 }

@@ -41,6 +41,7 @@ class JpaAuthorRepositoryTest {
     void loadAllAuthors() {
         var authors = IntStream.range(1, 4).mapToObj(i -> new Author(i, "Author_" + i)).toList();
         assertThat(authorRepository.findAll())
+                .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyElementsOf(authors);
     }
 }
