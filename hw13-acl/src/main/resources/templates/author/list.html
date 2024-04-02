@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{ layout :: common_header(~{::title}) }">
+    <title>Список авторов</title>
+</head>
+<body>
+<div th:replace="~{ layout :: logout-button }"/>
+<div id="container">
+    <div th:replace="~{ layout :: navigation }"/>
+    <div id="content">
+        <h3>Список авторов</h3>
+        <table class="table-fill">
+            <tbody>
+            <tr th:each="author : ${authors}">
+                <td th:text="${author.fullName}">Genre</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

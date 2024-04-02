@@ -19,3 +19,5 @@
 Задание №10 в папке [hw10-rest](./hw10-rest) ветка [hw10](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw10/hw10-rest).\
 Задание №11 в папке [hw11-webflux](./hw11-webflux) ветка [hw11](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw11/hw11-webflux).\
 Задание №12 в папке [hw12-auth](./hw12-auth) ветка [hw12](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw12/hw12-auth).
+
+Задание №13 в папке [hw13-acl](./hw13-acl) ветка [hw13](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw13/hw13-acl).
