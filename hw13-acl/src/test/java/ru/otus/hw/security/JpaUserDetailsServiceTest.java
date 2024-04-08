@@ -17,8 +17,8 @@ import java.util.Optional;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-@Import(UserDetailsServiceJpa.class)
-class UserDetailsServiceJpaTest {
+@Import(JpaUserDetailsService.class)
+class JpaUserDetailsServiceTest {
 
     @Autowired
     private UserDetailsService userDetailsService;
