@@ -18,11 +18,14 @@ import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.dto.GenreDto;
+import ru.otus.hw.models.Book;
 import ru.otus.hw.repositories.BookRepository;
+import ru.otus.hw.repositories.UserRepository;
 import ru.otus.hw.security.SecurityConfiguration;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.BookServiceImpl;
+import ru.otus.hw.services.CurrentUserAuthentication;
 import ru.otus.hw.services.GenreService;
 
 import java.util.Collections;
@@ -73,6 +76,12 @@ class BookControllerTest {
 
     @MockBean
     private PersistentTokenRepository persistentTokenRepository;
+
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private CurrentUserAuthentication currentUserAuthentication;
 
     @WithMockUser
     @Test
@@ -133,7 +142,7 @@ class BookControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser(authorities = "BOOK_DELETE")
+    @WithMockUser(roles = "MANAGER")
     @Test
     void shouldDeleteBook() throws Exception {
         mvc.perform(delete("/book/delete/777"));
@@ -155,7 +164,7 @@ class BookControllerTest {
         verify(bookService, never()).deleteById(777);
     }
 
-    @WithMockUser(authorities = {"ROLE_USER", "BOOK_MODIFY"})
+    @WithMockUser(roles = "MANAGER")
     @Test
     void shouldUpdateBook() throws Exception {
         mvc.perform(put("/book/1")
@@ -189,7 +198,7 @@ class BookControllerTest {
         verify(bookService, never()).update(any());
     }
 
-    @WithMockUser
+    @WithMockUser(roles = "MANAGER")
     @Test
     void should_not_update_book_with_blank_title() throws Exception {
         mvc.perform(put("/book/17")
@@ -202,7 +211,7 @@ class BookControllerTest {
                 .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
-    @WithMockUser
+    @WithMockUser(roles = "MANAGER")
     @Test
     void should_not_update_book_with_one_char_title() throws Exception {
         mvc.perform(put("/book/1")
@@ -215,7 +224,7 @@ class BookControllerTest {
                 .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
-    @WithMockUser
+    @WithMockUser(roles = "MANAGER")
     @Test
     void should_not_update_book_when_author_empty() throws Exception {
         mvc.perform(put("/book/1")
@@ -227,7 +236,7 @@ class BookControllerTest {
                 .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
-    @WithMockUser
+    @WithMockUser(roles = "MANAGER")
     @Test
     void should_not_update_book_when_genre_empty() throws Exception {
         mvc.perform(put("/book/1")
@@ -239,9 +248,10 @@ class BookControllerTest {
                 .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
-    @WithMockUser(authorities = {"ROLE_USER", "BOOK_MODIFY"})
+    @WithMockUser(roles = {"USER", "CUSTOMER"})
     @Test
     void shouldCreateBook() throws Exception {
+        given(bookMapper.toModel(any(BookCreateDto.class))).willReturn(new Book());
         mvc.perform(post("/book")
                 .param("title", "test_new_create_book")
                 .param("authorId", "33")
@@ -251,7 +261,7 @@ class BookControllerTest {
 
     @WithMockUser
     @Test
-    void denyCreateBookWhenAuthorityAbsent() throws Exception {
+    void denyCreateBookWhenRoleAbsent() throws Exception {
         mvc.perform(post("/book")
                         .param("title", "test_new_create_book")
                         .param("authorId", "33")
@@ -270,7 +280,7 @@ class BookControllerTest {
         verify(bookService, never()).create(any());
     }
 
-    @WithMockUser
+    @WithMockUser(roles = "CUSTOMER")
     @Test
     void should_not_create_book_with_blank_title() throws Exception {
         mvc.perform(post("/book")
@@ -282,7 +292,7 @@ class BookControllerTest {
                 .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
-    @WithMockUser
+    @WithMockUser(roles = "CUSTOMER")
     @Test
     void should_not_create_book_with_one_char_title() throws Exception {
         mvc.perform(post("/book")
@@ -294,7 +304,7 @@ class BookControllerTest {
                 .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
-    @WithMockUser
+    @WithMockUser(roles = "CUSTOMER")
     @Test
     void should_not_create_book_when_empty_author() throws Exception {
         mvc.perform(post("/book")
@@ -305,7 +315,7 @@ class BookControllerTest {
                 .andExpect(flash().attributeExists("book", BindingResult.MODEL_KEY_PREFIX + "book"));
     }
 
-    @WithMockUser
+    @WithMockUser(roles = "CUSTOMER")
     @Test
     void should_not_create_book_when_empty_genre() throws Exception {
         mvc.perform(post("/book")

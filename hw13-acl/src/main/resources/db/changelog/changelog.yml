@@ -10,3 +10,6 @@ databaseChangeLog:
       context: "test"
       file: 2024-04-02--03-insert-data-test.sql
       relativeToChangelogFile: true
+  - include:
+      file: 2024-04-11--01-update-data.sql
+      relativeToChangelogFile: true

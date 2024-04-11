@@ -3,10 +3,13 @@ package ru.otus.hw.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,19 +34,17 @@ public class SecurityConfiguration {
             return httpSecurity
                     .authorizeHttpRequests(requests -> requests
                             .requestMatchers("/login").permitAll()
-                            .requestMatchers("/book/comment/**").hasAuthority("BOOK_COMMENTS_VIEW")
-                            .anyRequest().authenticated())
+                            .requestMatchers(HttpMethod.POST, "/book").hasRole("CUSTOMER")
 
-                    .formLogin(form -> form
-                            .passwordParameter("a_pass")
-                            .usernameParameter("a_usr")
-                            .permitAll())
+                            .requestMatchers(HttpMethod.PUT,"/book/{bookId:\\d+}")
+                            .hasAnyRole("CUSTOMER", "MANAGER")
 
-                    .logout(logout -> logout
-                            .logoutUrl("/logout")
-                            .deleteCookies("JSESSIONID", securityProperties.rememberMeCookie())
-                            .permitAll())
-
+                            .requestMatchers(HttpMethod.DELETE,"/book/delete/{bookId:\\d+}")
+                            .hasAnyRole("CUSTOMER", "MANAGER")
+                            .requestMatchers(HttpMethod.GET).hasRole("USER")
+                            .anyRequest().denyAll())
+                    .formLogin(this::formLoginSettings)
+                    .logout(this::logoutSetting)
                     .rememberMe(memberService -> memberService.rememberMeServices(rememberMeServices))
                     .csrf(AbstractHttpConfigurer::disable)
                 .build();
@@ -62,5 +63,17 @@ public class SecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2A, 10);
+    }
+
+    private void formLoginSettings(FormLoginConfigurer<HttpSecurity> form) {
+        form.passwordParameter("a_pass")
+                .usernameParameter("a_usr")
+                .permitAll();
+    }
+
+    private void logoutSetting(LogoutConfigurer<HttpSecurity> logout) {
+        logout.logoutUrl("/logout")
+                .deleteCookies("JSESSIONID", securityProperties.rememberMeCookie())
+                .permitAll();
     }
 }

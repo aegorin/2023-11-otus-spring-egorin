@@ -1,7 +1,6 @@
 package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.controller.NotFoundException;
@@ -24,7 +23,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(readOnly = true)
     @Override
-    @PreAuthorize("hasRole('USER')")
     public List<CommentUpdateDto> findByBookId(long bookId) {
         return commentRepository.findByBookId(bookId).stream()
                 .map(c -> new CommentUpdateDto(c.getId(), c.getText()))

@@ -66,7 +66,7 @@ class JpaBookRepositoryTest {
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
-        var expectedBook = new Book(0, "BookTitle_10500", dbAuthors.get(0), dbGenres.get(0));
+        var expectedBook = new Book(0, "BookTitle_10500", dbAuthors.get(0), dbGenres.get(0), null);
         expectedBook = bookRepository.save(expectedBook);
 
         var actualBook = em.find(Book.class, expectedBook.getId());
@@ -79,7 +79,7 @@ class JpaBookRepositoryTest {
     @DisplayName("должен сохранять изменённую книгу")
     @Test
     void shouldSaveUpdatedBook() {
-        final var expectedBook = new Book(1L, "BookTitle_10500", dbAuthors.get(2), dbGenres.get(2));
+        final var expectedBook = new Book(1L, "BookTitle_10500", dbAuthors.get(2), dbGenres.get(2), null);
         var actualBook = em.find(Book.class, expectedBook.getId());
 
         Comparator<Author> authorComparator = Comparator.comparingLong(Author::getId);
@@ -128,7 +128,7 @@ class JpaBookRepositoryTest {
 
     private static List<Book> getDbBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
         return IntStream.range(1, 4).boxed()
-                .map(id -> new Book(id, "Book_" + id, dbAuthors.get(id - 1), dbGenres.get(id - 1)))
+                .map(id -> new Book(id, "Book_" + id, dbAuthors.get(id - 1), dbGenres.get(id - 1), null))
                 .toList();
     }
 }

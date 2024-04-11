@@ -17,10 +17,12 @@ import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.CommentUpdateDto;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.repositories.BookRepository;
+import ru.otus.hw.repositories.UserRepository;
 import ru.otus.hw.security.SecurityConfiguration;
 import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.BookServiceImpl;
 import ru.otus.hw.services.CommentService;
+import ru.otus.hw.services.CurrentUserAuthentication;
 
 import java.util.List;
 
@@ -54,7 +56,13 @@ class CommentControllerTest {
     @MockBean
     private PersistentTokenRepository persistentTokenRepository;
 
-    @WithMockUser(authorities = {"ROLE_USER", "BOOK_COMMENTS_VIEW"})
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private CurrentUserAuthentication currentUserAuthentication;
+
+    @WithMockUser
     @Test
     void shouldReturnAllCommentsForBook() throws Exception {
         BookDto book = new BookDto(1, "Title_of_book_1", new AuthorDto(), new GenreDto());

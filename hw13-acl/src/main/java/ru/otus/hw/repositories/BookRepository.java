@@ -16,4 +16,6 @@ public interface BookRepository extends ListCrudRepository<Book, Long> {
     @Override
     @EntityGraph("books_with_author_and_genre")
     List<Book> findAll();
+
+    boolean existsByIdAndOwnerId(Long bookId, Long userId);
 }

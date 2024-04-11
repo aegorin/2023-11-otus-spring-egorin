@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,16 +21,17 @@ public class JpaUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CurrentUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var user = userRepository.findByLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with login %s not found".formatted(username)));
 
-        return User.builder()
+        var userDetails = User.builder()
                 .username(user.getLogin())
                 .password(user.getPassword())
                 .disabled(user.isBlocked())
                 .authorities(userAuthorities(user.getId()))
                 .build();
+        return new CurrentUserDetails(user.getId(), userDetails);
     }
 
     private List<? extends GrantedAuthority> userAuthorities(Long userId) {

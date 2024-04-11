@@ -2,6 +2,7 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.controller.NotFoundException;
@@ -10,6 +11,8 @@ import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.repositories.BookRepository;
+import ru.otus.hw.repositories.UserRepository;
+import ru.otus.hw.security.CurrentUserDetails;
 
 import java.util.List;
 
@@ -21,9 +24,12 @@ public class BookServiceImpl implements BookService {
 
     private final BookMapper bookMapper;
 
+    private final UserRepository userRepository;
+
+    private final CurrentUserAuthentication currentUserAuthentication;
+
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('USER')")
     public BookDto findById(long id) {
         return bookRepository.findById(id)
                 .map(bookMapper::toDto)
@@ -32,7 +38,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('USER')")
     public List<BookDto> findAll() {
         return bookRepository.findAll().stream()
                 .map(bookMapper::toDto)
@@ -41,29 +46,32 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('BOOK_MODIFY')")
     public BookUpdateDto create(BookCreateDto bookCreateDto) {
         var book = bookMapper.toModel(bookCreateDto);
+        currentUserAuthentication.getCurrentUserDetails()
+                .map(CurrentUserDetails::getUserId)
+                .flatMap(userRepository::findById)
+                .ifPresent(book::setOwner);
         book = bookRepository.save(book);
         return bookMapper.toUpdateDto(book);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('BOOK_MODIFY')")
-    public BookUpdateDto update(BookUpdateDto bookUpdateDto) {
-        if (!bookRepository.existsById(bookUpdateDto.getId())) {
-            throw new NotFoundException("Book with id %d not found".formatted(bookUpdateDto.getId()));
-        }
+    @PreAuthorize("hasRole('MANAGER') or @ownerOfBookChecker.isCurrentUserOwnerOfBook(#bookDto)")
+    public BookUpdateDto update(@P("bookDto") BookUpdateDto bookUpdateDto) {
+        var savedBook = bookRepository.findById(bookUpdateDto.getId())
+                .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(bookUpdateDto.getId())));
         var book = bookMapper.toModel(bookUpdateDto);
+        book.setOwner(savedBook.getOwner());
         book = bookRepository.save(book);
         return bookMapper.toUpdateDto(book);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('BOOK_DELETE')")
-    public void deleteById(long id) {
+    @PreAuthorize("hasRole('MANAGER') or @ownerOfBookChecker.isCurrentUserOwnerOfBook(#bookId)")
+    public void deleteById(@P("bookId") long id) {
         bookRepository.deleteById(id);
     }
 }
