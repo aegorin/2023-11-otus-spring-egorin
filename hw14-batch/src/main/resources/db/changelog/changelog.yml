@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - include:
+      file: 2024-02-08--01-create-tables.sql
+      relativeToChangelogFile: true
+  - include:
+      context: "!test"
+      file: 2024-02-08--02-insert-data.sql
+      relativeToChangelogFile: true
+  - include:
+      context: "test"
+      file: 2024-02-08--03-insert-data-test.sql
+      relativeToChangelogFile: true

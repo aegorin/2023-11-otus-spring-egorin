@@ -1,0 +1,28 @@
+spring:
+  shell:
+    history:
+      enabled: false
+    interactive:
+      enabled: false
+    command:
+      version:
+        enabled: false
+  liquibase:
+    change-log: classpath:db/changelog/changelog.yml
+    contexts: test
+
+  batch:
+    job:
+      enabled: false
+
+  data:
+    mongodb:
+      database: egorin_av_booksdb_test
+      port: 0
+      host: localhost
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 6.0.4
