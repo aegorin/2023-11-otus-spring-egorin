@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{ layout :: common_header(~{::title}) }">
+    <title>Добавление новой книги</title>
+</head>
+<body>
+<div th:replace="~{ layout :: logout-button }"/>
+<div id="container">
+    <div th:replace="~{ layout :: navigation }"/>
+    <div id="content">
+        <h3>Добавление новой книги</h3>
+        <form th:method="post" th:action="@{/book}" th:object="${book}" id="book_form"></form>
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 20px;">Наименование</td>
+                <td>
+                    <input type="text" th:field="${book.title}" style="width: 100%;" form="book_form" required/>
+                    <div th:if="${#fields.hasErrors('${book.title}')}"
+                         th:errors="*{book.title}"
+                         class="error_message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>Автор</td>
+                <td>
+                    <select th:field="${book.authorId}" form="book_form">
+                        <option th:each="author : ${authors}"
+                                th:value="${author.id}"
+                                th:text="${author.fullName}">Автор</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Жанр</td>
+                <td>
+                    <select th:field="${book.genreId}" form="book_form">
+                        <option th:each="genre : ${genres}"
+                                th:value="${genre.id}"
+                                th:text="${genre.name}">Жанр</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: right;">
+                    <button type="submit" form="book_form" style="width: 90px;">Сохранить</button>
+                    <a th:href="@{/}"><button type="button" style="width: 90px;">Отмена</button></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
