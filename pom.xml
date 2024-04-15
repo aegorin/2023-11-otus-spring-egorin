@@ -23,6 +23,7 @@
         <module>hw10-rest</module>
         <module>hw11-webflux</module>
         <module>hw12-auth</module>
+        <module>hw13-acl</module>
         <module>hw14-batch</module>
     </modules>
 
