@@ -1,0 +1,7 @@
+spring:
+  shell:
+    history:
+      enabled: false
+    command:
+      version:
+        enabled: false
