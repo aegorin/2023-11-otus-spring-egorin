@@ -15,7 +15,14 @@ public class RequestCountingIndicator implements HealthIndicator {
     @Override
     public Health health() {
         int minimumRequestsInLatMinute = 10;
-        int requestInLastMinute = requestCountingService.getNumberRequestsInLastMinute();
+        int requestInLastMinute;
+        try {
+            requestInLastMinute = requestCountingService.getNumberRequestsInLastMinute();
+        } catch (Exception exception) {
+            return Health.unknown()
+                    .withException(exception)
+                    .build();
+        }
         var healthBuilder = requestInLastMinute >= minimumRequestsInLatMinute ? Health.up() : Health.down();
         return healthBuilder
                 .withDetail("requests to api in last minute", requestInLastMinute)
