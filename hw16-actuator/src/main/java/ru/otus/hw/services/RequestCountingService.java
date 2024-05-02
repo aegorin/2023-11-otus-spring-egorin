@@ -1,6 +1,6 @@
 package ru.otus.hw.services;
 
-public interface RequestToApiCounter {
+public interface RequestCountingService {
 
     void incrementRequest();
 

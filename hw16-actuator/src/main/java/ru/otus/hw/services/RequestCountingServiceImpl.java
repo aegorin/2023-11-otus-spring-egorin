@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
-public class RequestToApiCounterImpl implements RequestToApiCounter {
+public class RequestCountingServiceImpl implements RequestCountingService {
 
     private final Map<LocalDateTime, Integer> requestTimeMap = Collections.synchronizedMap(new LinkedHashMap<>() {
         @Override

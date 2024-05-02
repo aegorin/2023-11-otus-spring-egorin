@@ -7,7 +7,7 @@
 Добавлен индикатор, проверяющий количество обращений к ресурсам по url /api/v1/*\
 Если за прошедшую минуту было меньше 10 обращений, то возвращает статус DOWN.
 Состояние индикатора доступно по адресу
-http://localhost:8080/actuator/health/requestsToApi
+http://localhost:8080/actuator/health/requestCountingIndicator
 
 В каталоге [hw16-ui](../hw16-ui) фронтенд приложения на React.
 
