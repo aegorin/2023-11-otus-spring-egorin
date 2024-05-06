@@ -22,4 +22,5 @@
 
 Задание №13 в папке [hw13-acl](./hw13-acl) ветка [hw13](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw13/hw13-acl).\
 Задание №14 в папке [hw14-batch](./hw14-batch) ветка [hw14](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw14/hw14-batch).\
-Задание №15 в папке [hw15-integration](./hw15-integration) ветка [hw15](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw15/hw15-integration).
+Задание №15 в папке [hw15-integration](./hw15-integration) ветка [hw15](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw15/hw15-integration).\
+Задание №16 в папке [hw16-actuator](./hw16-actuator) ветка [hw16](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw16/hw16-actuator).
