@@ -1,0 +1,26 @@
+book-application:
+  security:
+    validTokenRememberMe: 86400
+    persistentTokenKey: "c5OzD11La1bKaLFA#DMBe28Kc2xK0q#z"
+    nameCookieRememberMe: "0aB1#0c#2B#B0B#C1C1#2#a#2BC1211#"
+
+spring:
+  application:
+    name: bookApplication
+  datasource:
+    url: jdbc:postgresql://localhost:5430/book_catalogue
+    username: appusr
+    password: spass
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog.yml
+    contexts: production
+
