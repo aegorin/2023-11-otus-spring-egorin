@@ -1,0 +1,29 @@
+name: library-application-otus
+services:
+  library-app:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    # Эти свойства перегружают соответствующие в application.yml
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container:5432/${DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS}
+      - JAVA_OPTS=-Dlogging.level.ru.otus.hw=INFO -Dlogging.level.root=WARN
+    depends_on:
+      - library-app-database
+
+  library-app-database:
+    container_name: postgres_container
+    image: "postgres:16.2"
+    ports:
+      - 5430:5432
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
