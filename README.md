@@ -25,5 +25,6 @@
 Задание №15 в папке [hw15-integration](./hw15-integration) ветка [hw15](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw15/hw15-integration).\
 Задание №16 в папке [hw16-actuator](./hw16-actuator) ветка [hw16](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw16/hw16-actuator).
 
-Задание №17 в папке [hw17-docker](./hw17-docker) ветка [hw17](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw17/hw17-docker).
+Задание №17 в папке [hw17-docker](./hw17-docker) ветка [hw17](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw17/hw17-docker).\
+Задание №18 в папке [hw18-resilience4j](./hw18-resilience4j) ветка [hw18](https://github.com/aegorin/2023-11-otus-spring-egorin/tree/hw18/hw18-resilience4j).
 
